@@ -44,10 +44,25 @@
         <button class="primary-button create-team-button" id="open-team-form" type="button"><span>＋</span> Create Team</button>
       </div>
 
+      <section class="my-teams-section" aria-label="My Teams">
+        <div class="section-heading">
+          <div><span class="section-kicker">YOUR BUILDS, ALL IN ONE PLACE</span><h2>My Teams <span class="heading-dot">.</span></h2></div>
+          <span class="workspace-label">SWITCH WORKSPACE</span>
+        </div>
+        <div class="my-team-switcher" id="my-team-switcher" role="tablist" aria-label="Your teams"></div>
+      </section>
+
       <section class="open-teams-section">
         <div class="section-heading">
           <div><span class="section-kicker">GOOD PEOPLE, GOOD PROJECTS</span><h2>Open teams <span class="heading-dot">.</span></h2></div>
-          <span class="open-status"><span class="live-dot"></span> Recruiting now</span>
+          <div class="open-team-actions">
+            <form class="join-code-form" id="join-code-form">
+              <label class="sr-only" for="join-code-input">Join with Code</label>
+              <input id="join-code-input" name="joinCode" placeholder="Join with Code" autocomplete="off" required>
+              <button type="submit">Join <span>→</span></button>
+            </form>
+            <span class="open-status"><span class="live-dot"></span> Recruiting now</span>
+          </div>
         </div>
         <div class="open-team-grid" id="open-team-list"></div>
       </section>
@@ -55,59 +70,37 @@
       <section class="workspace-section">
         <div class="section-heading">
           <div><span class="section-kicker">YOUR CURRENT BUILD</span><h2>Team workspace <span class="heading-dot">.</span></h2></div>
-          <span class="workspace-label"><span>◈</span> ACTIVE PROJECT</span>
+          <span class="team-visibility-badge" id="team-visibility-badge"></span>
         </div>
-        <div class="workspace-card">
+        <div class="workspace-card" id="team-workspace">
           <div class="workspace-header">
             <div class="workspace-title-wrap">
-              <span class="project-monogram">SH</span>
-              <div><span class="workspace-overline">SSETC · CHENNAI</span><h3>SSETC Hackathon 2026</h3></div>
+              <span class="project-monogram" id="workspace-monogram">SH</span>
+              <div><span class="workspace-overline" id="workspace-overline">SSETC · CHENNAI</span><h3 id="workspace-title">SSETC Hackathon 2026</h3></div>
             </div>
-            <span class="workspace-members"><span class="member-stack"><i>R</i><i>S</i><i>A</i></span> 3 members</span>
+            <div class="workspace-team-code" id="workspace-team-code"></div>
           </div>
           <section class="meet-banner">
             <div class="meet-icon">↗</div>
-            <div class="meet-info"><span>NEXT TEAM SYNC</span><strong id="meet-time">Tomorrow, 7:00 PM</strong></div>
+            <div class="meet-info"><span>NEXT G MEET</span><strong id="meet-time">Tomorrow, 7:00 PM</strong></div>
             <div class="meet-actions">
               <button class="ghost-button" id="edit-meet" type="button">Edit time / link</button>
               <a class="meet-join-button" id="join-meet" href="https://meet.google.com/" target="_blank" rel="noopener noreferrer">Join Meet <span>↗</span></a>
             </div>
           </section>
+          <div class="workspace-roster-section">
+            <div class="workspace-subheading"><span>SQUAD ROSTER</span><span id="roster-count"></span></div>
+            <div class="squad-roster" id="squad-roster"></div>
+          </div>
           <div class="project-list">
-            <article class="project-card" data-project="healthcare">
-              <button class="project-toggle" type="button" aria-expanded="false">
-                <span class="project-chevron">⌄</span>
-                <span class="project-name-block"><strong>AI Healthcare Prototype</strong><small>Product &amp; research</small></span>
-                <span class="progress-label" data-progress="healthcare">2/5 Tasks Done</span>
-                <span class="mini-progress"><i data-progress-bar="healthcare"></i></span>
-              </button>
-              <div class="project-content" hidden>
-                <div class="task-list" data-task-list="healthcare"></div>
-                <form class="add-task-form" data-add-task="healthcare">
-                  <input name="task" type="text" placeholder="Add a task…" aria-label="New healthcare project task" required>
-                  <input name="person" type="text" placeholder="Person" aria-label="Task owner" required>
-                  <input name="deadline" type="text" placeholder="Deadline" aria-label="Task deadline" required>
-                  <button type="submit" aria-label="Add task">＋</button>
-                </form>
-              </div>
-            </article>
-            <article class="project-card expanded" data-project="website">
-              <button class="project-toggle" type="button" aria-expanded="true">
-                <span class="project-chevron">⌄</span>
-                <span class="project-name-block"><strong>Main Website</strong><small>Frontend &amp; experience</small></span>
-                <span class="progress-label" data-progress="website"></span>
-                <span class="mini-progress"><i data-progress-bar="website"></i></span>
-              </button>
-              <div class="project-content">
-                <div class="task-list" data-task-list="website"></div>
-                <form class="add-task-form" data-add-task="website">
-                  <input name="task" type="text" placeholder="Add a task…" aria-label="New website task" required>
-                  <input name="person" type="text" placeholder="Person" aria-label="Task owner" required>
-                  <input name="deadline" type="text" placeholder="Deadline" aria-label="Task deadline" required>
-                  <button type="submit" aria-label="Add task">＋</button>
-                </form>
-              </div>
-            </article>
+            <div class="workspace-subheading task-checklist-heading"><span>TASK CHECKLIST</span><span id="task-progress"></span></div>
+            <div class="task-list" id="team-task-list"></div>
+            <form class="add-task-form" id="add-team-task-form">
+              <input name="task" type="text" placeholder="Add a task…" aria-label="New team task" required>
+              <input name="person" type="text" placeholder="Person" aria-label="Task owner" required>
+              <input name="deadline" type="text" placeholder="Deadline" aria-label="Task deadline" required>
+              <button type="submit" aria-label="Add task">＋</button>
+            </form>
           </div>
         </div>
       </section>
@@ -129,8 +122,12 @@
         <input class="form-input" id="team-roles" name="roles" placeholder="Frontend, AIML, designer…" required>
         <span class="form-label access-label">WHO CAN JOIN?</span>
         <div class="access-options">
-          <label class="access-choice"><input type="radio" name="access" value="open" checked><span><strong>Open to Anyone</strong><small>Let the right people find you</small></span></label>
-          <label class="access-choice"><input type="radio" name="access" value="code"><span><strong>Code Only</strong><small>Share a private team code</small></span></label>
+          <label class="access-choice"><input type="radio" name="access" value="open" checked><span><strong>Open</strong><small>Anyone can join from the list</small></span></label>
+          <label class="access-choice"><input type="radio" name="access" value="code"><span><strong>Code Only</strong><small>Join with your private code</small></span></label>
+        </div>
+        <div class="join-code-field" id="join-code-field" hidden>
+          <label class="form-label" for="team-join-code">CUSTOM JOIN CODE</label>
+          <input class="form-input" id="team-join-code" name="joinCode" placeholder="e.g. ROBO-27" autocomplete="off">
         </div>
         <button class="primary-button modal-submit" type="submit">Create your team <span>→</span></button>
       </form>
