@@ -104,10 +104,35 @@ function parsePrize(value) {
 
 function parseDeadline(value) {
   const text = String(value || "").trim();
+  const iso = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   const numeric = text.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
-  if (numeric) return new Date(Number(numeric[3]), Number(numeric[2]) - 1, Number(numeric[1])).getTime();
+  const year = Number(iso ? iso[1] : numeric?.[3]);
+  const month = Number(iso ? iso[2] : numeric?.[2]);
+  const day = Number(iso ? iso[3] : numeric?.[1]);
+  if (iso || numeric) {
+    const timestamp = Date.UTC(year, month - 1, day);
+    const date = new Date(timestamp);
+    return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+      ? timestamp
+      : Number.MAX_SAFE_INTEGER;
+  }
   const parsed = Date.parse(text);
   return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
+}
+
+function todayInKolkata() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(new Date());
+  const part = (type) => Number(parts.find((item) => item.type === type).value);
+  return Date.UTC(part("year"), part("month") - 1, part("day"));
+}
+
+function isRegistrationOpen(deadline) {
+  return parseDeadline(deadline) >= todayInKolkata();
 }
 
 function normalizeHackathon(item) {
@@ -169,7 +194,7 @@ function initializeDashboard() {
   }
 
   function renderHackathons() {
-    let visible = hackathons.filter((item) => {
+    let visible = hackathons.filter((item) => isRegistrationOpen(item.deadline)).filter((item) => {
       const locationMatches = filters.location === "All"
         || (filters.location === "Online"
           ? /online/i.test(item.mode)

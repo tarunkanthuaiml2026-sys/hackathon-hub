@@ -4,6 +4,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from email.header import decode_header
 from email.message import Message
 from email.utils import parseaddr
@@ -15,6 +16,7 @@ from pathlib import Path
 MAILBOX = "imap.gmail.com"
 SENDER = "competitions@citchennai.net"
 DATA_FILE = Path(__file__).with_name("hackathons.json")
+IST = timezone(timedelta(hours=5, minutes=30), name="IST")
 
 
 class TextExtractor(HTMLParser):
@@ -75,6 +77,21 @@ def field_value(text, labels):
         text,
     )
     return match.group(1).strip() if match else ""
+
+
+def parse_deadline(value):
+    text = str(value or "").strip()
+    for date_format in ("%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(text, date_format).date()
+        except ValueError:
+            continue
+    return None
+
+
+def is_registration_open(event, today=None):
+    deadline = parse_deadline(event.get("deadline"))
+    return deadline is None or deadline >= (today or datetime.now(IST).date())
 
 
 def parse_event(message: Message):
@@ -158,16 +175,21 @@ def scan_mailbox(username, app_password):
         updates = {}
         message_ids = results[0].split() if results and results[0] else []
         for message_id in message_ids:
-            status, response = mailbox.fetch(message_id, "(RFC822)")
-            if status != "OK":
-                print(f"Could not fetch message {message_id.decode('ascii', errors='replace')}")
-                continue
-            raw_messages = [item[1] for item in response if isinstance(item, tuple)]
-            if not raw_messages:
-                continue
-            event = parse_event(email.message_from_bytes(raw_messages[0]))
-            if event:
-                updates[event["url"]] = event
+            message_label = message_id.decode("ascii", errors="replace")
+            try:
+                status, response = mailbox.fetch(message_id, "(RFC822)")
+                if status != "OK":
+                    print(f"Could not fetch message {message_label}")
+                    continue
+                raw_messages = [item[1] for item in response if isinstance(item, tuple)]
+                if not raw_messages:
+                    continue
+                message = email.message_from_bytes(raw_messages[0])
+                event = parse_event(message)
+                if event:
+                    updates[event["url"]] = event
+            except Exception as error:
+                print(f"Skipping email {message_label} after parsing error: {error}")
         return list(updates.values())
     finally:
         try:
@@ -188,7 +210,8 @@ def main():
     for event in scanned:
         by_url[event["url"]] = event
 
-    merged = list(by_url.values())
+    today = datetime.now(IST).date()
+    merged = [event for event in by_url.values() if is_registration_open(event, today)]
     if merged != events:
         with DATA_FILE.open("w", encoding="utf-8", newline="\n") as file:
             json.dump(merged, file, ensure_ascii=False, indent=2)
