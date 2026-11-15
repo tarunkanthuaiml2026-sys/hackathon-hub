@@ -277,10 +277,12 @@
     .btn-primary { background: #3b82f6; border-color: #3b82f6; color: #fff; }
     .btn-primary:hover { background: #2563eb; }
     .btn-green { background: rgba(52, 211, 153, 0.14); border-color: #059669; color: var(--green); }
+    .btn-green:hover { background: rgba(52, 211, 153, 0.24); }
     .btn-amber { background: rgba(251, 191, 36, 0.14); border-color: #d97706; color: var(--amber); }
     .btn-danger { background: rgba(248, 113, 113, 0.12); border-color: #dc2626; color: var(--red); }
     /* Forms & Team Cards */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
@@ -332,6 +334,8 @@
       font-weight: 600;
     }
     .chip.creator { border-color: var(--amber); color: var(--amber); }
+    .chip.open-badge { border-color: rgba(52, 211, 153, 0.45); background: rgba(52, 211, 153, 0.1); color: var(--green); }
+    .chip.full-badge { border-color: rgba(248, 113, 113, 0.45); background: rgba(248, 113, 113, 0.1); color: var(--red); }
     .creator-bar {
       margin-top: 16px;
       padding-top: 14px;
@@ -342,7 +346,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .archive-box {
+    .inline-box {
       display: none;
       margin-top: 12px;
       background: #080d1a;
@@ -350,7 +354,7 @@
       border-radius: 10px;
       padding: 12px;
     }
-    .archive-box.open { display: block; }
+    .inline-box.open { display: block; }
     /* Archive Cards */
     .archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
     .archive-card {
@@ -390,7 +394,7 @@
       body { flex-direction: column; }
       .main { margin-left: 0; padding: 20px; }
       .event-card { grid-template-columns: 1fr; }
-      .grid-2 { grid-template-columns: 1fr; }
+      .grid-2, .form-row-2 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -484,7 +488,7 @@
     <section id="view-teams" class="view">
       <div class="hero">
         <h1>Active <span>Squads.</span></h1>
-        <p>Create a team, join with a code, switch between your joined teams at the top right, and track live status.</p>
+        <p>Launch an open squad anyone can join in 1 click, or create a private squad with an auto-generated Join Code.</p>
       </div>
 
       <div class="grid-2">
@@ -493,16 +497,29 @@
           <input class="input" id="create-hackathon" placeholder="Hackathon Name (e.g. Buildathon)" />
           <input class="input" id="create-team-name" placeholder="Team Name (e.g. Neural Ninjas)" />
           <input class="input" id="create-creator-name" placeholder="Your Name (Team Creator)" />
+          <div class="form-row-2">
+            <select id="create-visibility">
+              <option value="open">🌐 Open (Anyone can join)</option>
+              <option value="private">🔒 Private (Join Code)</option>
+            </select>
+            <select id="create-max-size">
+              <option value="2">Max 2 Members</option>
+              <option value="3">Max 3 Members</option>
+              <option value="4" selected>Max 4 Members</option>
+              <option value="5">Max 5 Members</option>
+              <option value="6">Max 6 Members</option>
+            </select>
+          </div>
           <input class="input" id="create-meet-link" placeholder="Optional G Meet / Discord Link" />
           <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="createTeam()">Create Team Space</button>
         </div>
 
         <div class="panel">
-          <h3>Join an Existing Team</h3>
-          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Enter the 5-character Join Code shared by your squad creator to add this team to your switcher.</p>
+          <h3>Join a Private Team with Code</h3>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">For <strong>Open</strong> teams, just click <strong>+ Join Team</strong> directly on their card below. For <strong>Private</strong> teams, enter the creator's 5-character code here:</p>
           <input class="input" id="join-code-input" placeholder="Join Code (e.g. CIT42)" style="text-transform:uppercase;" />
           <input class="input" id="join-member-name" placeholder="Your Name" />
-          <button class="btn btn-green" style="width:100%;justify-content:center;" onclick="joinTeam()">Join Squad</button>
+          <button class="btn btn-green" style="width:100%;justify-content:center;" onclick="joinTeam()">Join Private Squad</button>
         </div>
       </div>
 
@@ -529,7 +546,7 @@
     // =========================================================
     // PASTE YOUR FIREBASE CONFIG HERE
     // =========================================================
-     const firebaseConfig = {
+    c const firebaseConfig = {
     apiKey: "AIzaSyBfmcdz-k8DjKrJUk78pBcYK3TwjE9esSA",
     authDomain: "aaaaaa-4288e.firebaseapp.com",
     projectId: "aaaaaa-4288e",
@@ -537,7 +554,6 @@
     messagingSenderId: "991853398349",
     appId: "1:991853398349:web:e61fc0d07c8822fe80cf04"
     };
-    
 
     // Browser identity for creator-only permissions
     let myBrowserId = localStorage.getItem('hh_browser_id');
@@ -689,6 +705,8 @@
       const hackathonName = document.getElementById('create-hackathon').value.trim();
       const teamName = document.getElementById('create-team-name').value.trim();
       const creatorName = document.getElementById('create-creator-name').value.trim();
+      const visibility = document.getElementById('create-visibility').value;
+      const maxSize = parseInt(document.getElementById('create-max-size').value, 10) || 4;
       const meetLink = document.getElementById('create-meet-link').value.trim();
 
       if (!hackathonName || !teamName || !creatorName) {
@@ -703,6 +721,8 @@
         teamName,
         creatorName,
         creatorId: myBrowserId,
+        visibility,
+        maxSize,
         joinCode,
         meetLink,
         status: 'Working',
@@ -715,6 +735,32 @@
       saveJoinedLocal(teamId);
     };
 
+    window.openJoinPrompt = (teamId) => {
+      const box = document.getElementById('open-join-box-' + teamId);
+      box.classList.toggle('open');
+      if (box.classList.contains('open')) {
+        document.getElementById('open-join-name-' + teamId).focus();
+      }
+    };
+
+    window.confirmOpenJoin = async (teamId) => {
+      const team = allTeams.find(t => t.id === teamId);
+      if (!team) return;
+      const memberName = document.getElementById('open-join-name-' + teamId).value.trim();
+      if (!memberName) return alert('Enter your name to join!');
+
+      const maxSize = team.maxSize || 4;
+      if ((team.members || []).length >= maxSize) {
+        return alert('Sorry, this squad is already full!');
+      }
+
+      await updateDoc(doc(db, 'teams', teamId), {
+        members: arrayUnion(memberName)
+      });
+
+      saveJoinedLocal(teamId);
+    };
+
     window.joinTeam = async () => {
       if (!db) return alert('Paste your Firebase config in index.html first!');
       const code = document.getElementById('join-code-input').value.trim().toUpperCase();
@@ -723,6 +769,11 @@
 
       const match = allTeams.find(t => (t.joinCode || '').toUpperCase() === code);
       if (!match) return alert('No active team found with code: ' + code);
+
+      const maxSize = match.maxSize || 4;
+      if ((match.members || []).length >= maxSize) {
+        return alert('Sorry, this squad is already full!');
+      }
 
       await updateDoc(doc(db, 'teams', match.id), {
         members: arrayUnion(memberName)
@@ -813,12 +864,15 @@
         return;
       }
 
-      // Put focused team first
       const sorted = [...allTeams].sort((a, b) => (a.id === focusedTeamId ? -1 : b.id === focusedTeamId ? 1 : 0));
 
       container.innerHTML = sorted.map(t => {
         const isCreator = t.creatorId === myBrowserId;
         const members = t.members || [];
+        const maxSize = t.maxSize || 4;
+        const spotsLeft = Math.max(0, maxSize - members.length);
+        const isOpen = t.visibility === 'open';
+
         return `
           <div class="team-card ${t.id === focusedTeamId ? 'focused' : ''}">
             <div class="team-header">
@@ -826,18 +880,34 @@
                 <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:3px;">${esc(t.hackathonName)}</div>
                 <h3 style="font-size:20px;">${esc(t.teamName)} ${isCreator ? '<span title="You created this team">👑</span>' : ''}</h3>
               </div>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <span class="chip">Code: <strong>${esc(t.joinCode)}</strong></span>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                ${isOpen
+                  ? `<span class="chip ${spotsLeft > 0 ? 'open-badge' : 'full-badge'}">🌐 Open • ${spotsLeft > 0 ? `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left` : 'Full'}</span>`
+                  : `<span class="chip">🔒 Code: <strong>${esc(t.joinCode)}</strong></span>
+                     <span class="chip ${spotsLeft > 0 ? '' : 'full-badge'}">${spotsLeft > 0 ? `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left` : 'Full'}</span>`
+                }
                 <span class="status-pill status-${esc(t.status || 'Working')}">${esc(t.status || 'Working')}</span>
               </div>
             </div>
 
             ${t.meetLink ? `<div style="margin-bottom:10px;font-size:13px;">🔗 Meet: <a href="${esc(t.meetLink)}" target="_blank" style="color:var(--accent);">${esc(t.meetLink)}</a></div>` : ''}
 
-            <div style="font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.08em;">TEAM MEMBERS (${members.length})</div>
+            <div style="font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.08em;">TEAM MEMBERS (${members.length} / ${maxSize})</div>
             <div class="member-chips">
               ${members.map((m, idx) => `<span class="chip ${idx === 0 ? 'creator' : ''}">${esc(m)}${idx === 0 ? ' (Creator)' : ''}</span>`).join('')}
             </div>
+
+            ${isOpen && spotsLeft > 0 ? `
+              <div style="margin-top:8px;">
+                <button class="btn btn-green" onclick="openJoinPrompt('${t.id}')">+ Join Team (${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left →)</button>
+                <div class="inline-box" id="open-join-box-${t.id}">
+                  <div style="display:flex;gap:8px;">
+                    <input class="input" style="margin-bottom:0;" id="open-join-name-${t.id}" placeholder="Enter your name to join..." />
+                    <button class="btn btn-green" onclick="confirmOpenJoin('${t.id}')">Confirm Join</button>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
 
             ${isCreator ? `
               <div class="creator-bar">
@@ -849,7 +919,7 @@
                 </div>
                 <button class="btn btn-danger" onclick="deleteTeam('${t.id}')">Delete Team</button>
               </div>
-              <div class="archive-box" id="archive-box-${t.id}">
+              <div class="inline-box" id="archive-box-${t.id}">
                 <label style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">
                   Enter your result (e.g. <em>Won 1st Place</em> or <em>Reached Round 2</em>):
                 </label>
