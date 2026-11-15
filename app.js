@@ -27,6 +27,22 @@ function writeStorage(key, value) {
   }
 }
 
+function validateTrimmedFields(form, fields) {
+  for (const [name, label] of fields) {
+    const input = form.elements.namedItem(name);
+    input.setCustomValidity(String(input.value).trim() ? "" : `Please enter ${label}.`);
+  }
+  return form.reportValidity();
+}
+
+function clearCustomValidityOnInput(form, names) {
+  for (const name of names) {
+    form.elements.namedItem(name).addEventListener("input", (event) => {
+      event.currentTarget.setCustomValidity("");
+    });
+  }
+}
+
 function saveActiveTeamId(teamId) {
   if (teamId) {
     writeStorage(STORAGE_KEYS.activeTeam, teamId);
@@ -136,6 +152,7 @@ function initializeDashboard() {
   const teamCodeInput = document.querySelector("#start-team-code");
   const teamCodeField = document.querySelector("#start-team-code-field");
   const selectedHackathonLabel = document.querySelector("#start-team-hackathon");
+  clearCustomValidityOnInput(teamForm, ["teamName", "creatorName", "joinCode"]);
   let hackathons = [];
   let selectedHackathon = null;
 
@@ -143,6 +160,7 @@ function initializeDashboard() {
     const codeOnly = teamForm.querySelector('input[name="startAccess"]:checked').value === "code";
     teamCodeField.hidden = !codeOnly;
     teamCodeInput.required = codeOnly;
+    if (!codeOnly) teamCodeInput.setCustomValidity("");
   }
 
   function closeStartTeamModal() {
@@ -251,8 +269,11 @@ function initializeDashboard() {
     const formData = new FormData(teamForm);
     const access = String(formData.get("startAccess"));
     const code = String(formData.get("joinCode") || "").trim().toUpperCase();
+    const fields = [["teamName", "a team name"], ["creatorName", "your name"]];
+    if (access === "code") fields.push(["joinCode", "a join code"]);
+    if (!validateTrimmedFields(teamForm, fields)) return;
     const teams = readStorage(STORAGE_KEYS.teams, []);
-    if (access === "code" && teams.some((team) => team.access === "code" && team.code?.toUpperCase() === code)) {
+    if (access === "code" && teams.some((team) => team.access === "code" && String(team.code || "").toUpperCase() === code)) {
       teamCodeInput.setCustomValidity("That join code is already in use.");
       teamCodeInput.reportValidity();
       return;
@@ -390,6 +411,7 @@ function initializeTeams() {
   const joinCodeInput = codeForm.elements.joinCode;
   const template = document.querySelector("#team-workspace-template");
   const selectedHackathon = readStorage(STORAGE_KEYS.selectedHackathon, "");
+  clearCustomValidityOnInput(createForm, ["teamName", "hackathonName", "creatorName", "roles", "joinCode"]);
 
   function persistTeams() {
     teams = [...new Map(teams.map((team) => [team.id, normalizeTeam(team)])).values()];
@@ -512,6 +534,7 @@ function initializeTeams() {
       joinMeet.setAttribute("aria-disabled", "true");
     }
     const meetForm = workspace.querySelector('[data-action="save-meet"]');
+    clearCustomValidityOnInput(meetForm, ["topic", "link"]);
     meetForm.elements.topic.value = meeting?.topic || "";
     meetForm.elements.dateTime.value = meeting?.dateTime || "";
     meetForm.elements.link.value = meeting?.link || "";
@@ -555,11 +578,14 @@ function initializeTeams() {
       const title = String(formData.get("task")).trim();
       const person = String(formData.get("person")).trim();
       const deadline = String(formData.get("deadline")).trim();
-      if (!title || !person || !deadline) return;
+      if (!validateTrimmedFields(event.currentTarget, [
+        ["task", "a task"], ["person", "a task owner"], ["deadline", "a task deadline"]
+      ])) return;
       saveTeam(teamId, (team) => {
         team.tasks.push({ title, person, deadline, done: false });
         return team;
       });
+      clearCustomValidityOnInput(workspace.querySelector('[data-action="add-task"]'), ["task", "person", "deadline"]);
       renderWorkspace();
     });
 
@@ -571,7 +597,8 @@ function initializeTeams() {
       const topic = String(formData.get("topic")).trim();
       const dateTime = String(formData.get("dateTime"));
       const link = String(formData.get("link")).trim();
-      if (!topic || !dateTime || !/^https:\/\//i.test(link)) {
+      if (!validateTrimmedFields(meetForm, [["topic", "a meeting topic"]])) return;
+      if (!/^https:\/\//i.test(link)) {
         meetForm.elements.link.setCustomValidity("Enter a valid meeting link starting with https://.");
         meetForm.elements.link.reportValidity();
         return;
@@ -584,7 +611,6 @@ function initializeTeams() {
       renderWorkspace();
     });
 
-    meetForm.elements.link.addEventListener("input", () => meetForm.elements.link.setCustomValidity(""));
     meetForm.querySelector('[data-action="clear-meet"]').addEventListener("click", () => {
       const teamId = activeTeam.id;
       if (teamId !== getActiveTeamId()) return;
@@ -595,12 +621,14 @@ function initializeTeams() {
       renderWorkspace();
     });
 
-    workspace.querySelector('[data-action="add-member"]').addEventListener("submit", (event) => {
+    const addMemberForm = workspace.querySelector('[data-action="add-member"]');
+    clearCustomValidityOnInput(addMemberForm, ["member"]);
+    addMemberForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const teamId = activeTeam.id;
       if (teamId !== getActiveTeamId()) return;
       const name = String(new FormData(event.currentTarget).get("member")).trim();
-      if (!name) return;
+      if (!validateTrimmedFields(event.currentTarget, [["member", "a teammate name"]])) return;
       saveTeam(teamId, (team) => {
         if (!team.roster.some((person) => person.toLowerCase() === name.toLowerCase())) {
           team.roster.push(name);
@@ -678,6 +706,7 @@ function initializeTeams() {
     const codeOnly = createForm.querySelector('input[name="access"]:checked').value === "code";
     codeField.hidden = !codeOnly;
     codeInput.required = codeOnly;
+    if (!codeOnly) codeInput.setCustomValidity("");
   }
   accessRadios.forEach((radio) => radio.addEventListener("change", updateJoinCodeField));
   updateJoinCodeField();
@@ -687,6 +716,14 @@ function initializeTeams() {
     const formData = new FormData(createForm);
     const access = String(formData.get("access"));
     const code = String(formData.get("joinCode") || "").trim().toUpperCase();
+    const fields = [
+      ["teamName", "a team name"],
+      ["hackathonName", "a hackathon name"],
+      ["creatorName", "your name"],
+      ["roles", "at least one role"]
+    ];
+    if (access === "code") fields.push(["joinCode", "a join code"]);
+    if (!validateTrimmedFields(createForm, fields)) return;
     if (access === "code" && teams.some((team) => team.access === "code" && String(team.code || "").toUpperCase() === code)) {
       codeInput.setCustomValidity("That join code is already in use.");
       codeInput.reportValidity();
@@ -708,6 +745,7 @@ function initializeTeams() {
     persistTeams();
     saveActiveTeamId(newTeam.id);
     createForm.reset();
+    createForm.querySelectorAll("input").forEach((input) => input.setCustomValidity(""));
     codeInput.setCustomValidity("");
     hackathonInput.value = "";
     updateJoinCodeField();
