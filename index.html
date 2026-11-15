@@ -88,5 +88,30 @@
       <p class="page-footnote"><span>✳</span> The best time to start is before the deadline.</p>
     </section>
   </main>
+
+  <div class="modal-backdrop" id="start-team-modal" hidden>
+    <section class="team-modal" role="dialog" aria-modal="true" aria-labelledby="start-team-modal-title">
+      <button class="modal-close" id="close-start-team-modal" type="button" aria-label="Close">×</button>
+      <div class="eyebrow"><span class="eyebrow-line"></span> BUILD YOUR NEXT BIG IDEA</div>
+      <h2 id="start-team-modal-title">Start a team<span class="heading-dot">.</span></h2>
+      <p class="modal-copy">Create a team for <strong id="start-team-hackathon"></strong>.</p>
+      <form id="start-team-form">
+        <label class="form-label" for="start-team-name">TEAM NAME</label>
+        <input class="form-input" id="start-team-name" name="teamName" placeholder="e.g. The Midnight Builders" required>
+        <label class="form-label" for="start-team-creator">YOUR NAME</label>
+        <input class="form-input" id="start-team-creator" name="creatorName" placeholder="How teammates will know you" required>
+        <span class="form-label access-label">WHO CAN JOIN?</span>
+        <div class="access-options">
+          <label class="access-choice"><input type="radio" name="startAccess" value="open" checked><span><strong>Open</strong><small>Anyone can join from the list</small></span></label>
+          <label class="access-choice"><input type="radio" name="startAccess" value="code"><span><strong>Code Only</strong><small>Join with your private code</small></span></label>
+        </div>
+        <div class="join-code-field" id="start-team-code-field" hidden>
+          <label class="form-label" for="start-team-code">CUSTOM JOIN CODE</label>
+          <input class="form-input" id="start-team-code" name="joinCode" placeholder="e.g. ROBO-27" autocomplete="off">
+        </div>
+        <button class="primary-button modal-submit" type="submit">Create your team <span>→</span></button>
+      </form>
+    </section>
+  </div>
 </body>
 </html>

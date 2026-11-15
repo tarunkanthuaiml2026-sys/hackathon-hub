@@ -2,7 +2,8 @@ const STORAGE_KEYS = {
   selectedHackathon: "hackathonHub.selectedHackathon",
   teams: "hackathonHub.teams",
   members: "hackathonHub.myTeams",
-  activeTeam: "hackathonHub.activeTeam",
+  activeTeam: "activeTeamId",
+  legacyActiveTeam: "hackathonHub.activeTeam",
   claims: "hackathonHub.claims",
   legacyMeeting: "hackathonHub.meeting",
   legacyProjects: "hackathonHub.projects"
@@ -24,6 +25,40 @@ function writeStorage(key, value) {
   } catch (error) {
     console.error(`Unable to save ${key} to localStorage.`, error);
   }
+}
+
+function saveActiveTeamId(teamId) {
+  if (teamId) {
+    writeStorage(STORAGE_KEYS.activeTeam, teamId);
+    writeStorage(STORAGE_KEYS.legacyActiveTeam, teamId);
+  } else {
+    localStorage.removeItem(STORAGE_KEYS.activeTeam);
+    localStorage.removeItem(STORAGE_KEYS.legacyActiveTeam);
+  }
+}
+
+function createTeamRecord({
+  name,
+  hackathon,
+  access = "open",
+  code = "",
+  roles = [],
+  creatorName = "You",
+  roster = [creatorName]
+}) {
+  return {
+    id: `team-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    name,
+    hackathon,
+    creatorName,
+    roles,
+    access,
+    code,
+    spots: roles.length || 1,
+    roster,
+    meeting: null,
+    tasks: []
+  };
 }
 
 function escapeHtml(value) {
@@ -94,7 +129,26 @@ function initializeDashboard() {
 
   const filters = { location: "All", teamSize: "All", sort: "deadline" };
   const count = document.querySelector("#result-count");
+  const teamModal = document.querySelector("#start-team-modal");
+  const teamForm = document.querySelector("#start-team-form");
+  const teamNameInput = document.querySelector("#start-team-name");
+  const creatorNameInput = document.querySelector("#start-team-creator");
+  const teamCodeInput = document.querySelector("#start-team-code");
+  const teamCodeField = document.querySelector("#start-team-code-field");
+  const selectedHackathonLabel = document.querySelector("#start-team-hackathon");
   let hackathons = [];
+  let selectedHackathon = null;
+
+  function updateStartTeamCodeField() {
+    const codeOnly = teamForm.querySelector('input[name="startAccess"]:checked').value === "code";
+    teamCodeField.hidden = !codeOnly;
+    teamCodeInput.required = codeOnly;
+  }
+
+  function closeStartTeamModal() {
+    teamModal.hidden = true;
+    selectedHackathon = null;
+  }
 
   function renderHackathons() {
     let visible = hackathons.filter((item) => {
@@ -157,8 +211,15 @@ function initializeDashboard() {
 
     list.querySelectorAll(".start-team-button").forEach((button) => {
       button.addEventListener("click", () => {
-        writeStorage(STORAGE_KEYS.selectedHackathon, visible[Number(button.dataset.hackathonIndex)].title);
-        window.location.href = "teams.html";
+        selectedHackathon = visible[Number(button.dataset.hackathonIndex)];
+        selectedHackathonLabel.textContent = selectedHackathon.title;
+        teamNameInput.value = "";
+        creatorNameInput.value = "";
+        teamCodeInput.value = "";
+        teamForm.querySelector('input[name="startAccess"][value="open"]').checked = true;
+        updateStartTeamCodeField();
+        teamModal.hidden = false;
+        teamNameInput.focus();
       });
     });
   }
@@ -173,6 +234,48 @@ function initializeDashboard() {
     });
   });
 
+  teamForm.querySelectorAll('input[name="startAccess"]').forEach((radio) => {
+    radio.addEventListener("change", updateStartTeamCodeField);
+  });
+  updateStartTeamCodeField();
+  document.querySelector("#close-start-team-modal").addEventListener("click", closeStartTeamModal);
+  teamModal.addEventListener("click", (event) => {
+    if (event.target === teamModal) closeStartTeamModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !teamModal.hidden) closeStartTeamModal();
+  });
+  teamForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!selectedHackathon) return;
+    const formData = new FormData(teamForm);
+    const access = String(formData.get("startAccess"));
+    const code = String(formData.get("joinCode") || "").trim().toUpperCase();
+    const teams = readStorage(STORAGE_KEYS.teams, []);
+    if (access === "code" && teams.some((team) => team.access === "code" && team.code?.toUpperCase() === code)) {
+      teamCodeInput.setCustomValidity("That join code is already in use.");
+      teamCodeInput.reportValidity();
+      return;
+    }
+    teamCodeInput.setCustomValidity("");
+    const team = createTeamRecord({
+      name: String(formData.get("teamName")).trim(),
+      creatorName: String(formData.get("creatorName")).trim(),
+      hackathon: selectedHackathon.title,
+      access,
+      code: access === "code" ? code : "",
+      roster: [String(formData.get("creatorName")).trim()]
+    });
+    const members = new Set(readStorage(STORAGE_KEYS.members, []));
+    teams.unshift(team);
+    members.add(team.id);
+    writeStorage(STORAGE_KEYS.teams, teams);
+    writeStorage(STORAGE_KEYS.members, [...members]);
+    saveActiveTeamId(team.id);
+    window.location.href = "teams.html";
+  });
+  teamCodeInput.addEventListener("input", () => teamCodeInput.setCustomValidity(""));
+
   loadHackathons().then((items) => {
     hackathons = items;
     renderHackathons();
@@ -185,21 +288,6 @@ function initializeDashboard() {
 
 const DEFAULT_TEAMS = [
   {
-    id: "workspace-ssetc",
-    name: "SSETC Hackathon 2026",
-    hackathon: "SSETC Healthcare 2026",
-    roles: [],
-    access: "open",
-    code: "",
-    spots: 0,
-    roster: ["Rahul", "Sanjay", "Aditi"],
-    meeting: { time: "Tomorrow, 7:00 PM", link: "https://meet.google.com/" },
-    tasks: [
-      { title: "Chatbot", person: "Rahul", deadline: "Nov 20", done: false },
-      { title: "Frontend", person: "Sanjay", deadline: "Nov 22", done: false }
-    ]
-  },
-  {
     id: "team-1",
     name: "The Data Dreamers",
     hackathon: "India AI Buildathon",
@@ -208,7 +296,7 @@ const DEFAULT_TEAMS = [
     code: "",
     spots: 2,
     roster: ["Maya"],
-    meeting: { time: "Not scheduled", link: "https://meet.google.com/" },
+    meeting: null,
     tasks: []
   },
   {
@@ -220,7 +308,7 @@ const DEFAULT_TEAMS = [
     code: "",
     spots: 1,
     roster: ["Dev", "Priya"],
-    meeting: { time: "Not scheduled", link: "https://meet.google.com/" },
+    meeting: null,
     tasks: []
   },
   {
@@ -232,7 +320,7 @@ const DEFAULT_TEAMS = [
     code: "",
     spots: 2,
     roster: ["Arjun"],
-    meeting: { time: "Not scheduled", link: "https://meet.google.com/" },
+    meeting: null,
     tasks: []
   }
 ];
@@ -240,14 +328,22 @@ const DEFAULT_TEAMS = [
 function normalizeTeam(team) {
   return {
     ...team,
+    id: String(team.id || ""),
+    name: String(team.name || ""),
+    hackathon: String(team.hackathon || ""),
     access: team.access === "code" || team.access === "code-only" ? "code" : "open",
     code: String(team.code || ""),
     roles: Array.isArray(team.roles) ? team.roles : [],
     spots: Number.isFinite(Number(team.spots)) ? Number(team.spots) : 1,
-    roster: Array.isArray(team.roster) ? team.roster : [],
+    roster: Array.isArray(team.roster) ? [...new Set(team.roster.map(String))] : [],
     meeting: team.meeting && typeof team.meeting === "object"
-      ? { time: team.meeting.time || "Not scheduled", link: team.meeting.link || "https://meet.google.com/" }
-      : { time: "Not scheduled", link: "https://meet.google.com/" },
+      ? {
+        topic: String(team.meeting.topic || ""),
+        dateTime: String(team.meeting.dateTime || ""),
+        legacyTime: String(team.meeting.time || ""),
+        link: String(team.meeting.link || "")
+      }
+      : null,
     tasks: Array.isArray(team.tasks) ? team.tasks : []
   };
 }
@@ -259,64 +355,85 @@ function initializeTeams() {
   const legacyTeams = readStorage(STORAGE_KEYS.teams, []);
   const claims = readStorage(STORAGE_KEYS.claims, {});
   const savedMemberships = readStorage(STORAGE_KEYS.members, null);
-  const memberships = new Set(Array.isArray(savedMemberships)
-    ? savedMemberships
-    : ["workspace-ssetc", ...legacyTeams.map((team) => team.id)]);
-  const savedTeams = new Map(legacyTeams.map((team) => [team.id, normalizeTeam(team)]));
+  const memberships = new Set(Array.isArray(savedMemberships) ? savedMemberships : []);
+  const defaultTeamIds = new Set(DEFAULT_TEAMS.map((team) => team.id));
+  const savedTeams = new Map(
+    (Array.isArray(legacyTeams) ? legacyTeams : [])
+      .filter((team) => team.id !== "workspace-ssetc")
+      .map((team) => [team.id, normalizeTeam(team)])
+  );
   DEFAULT_TEAMS.forEach((seed) => {
     if (!savedTeams.has(seed.id)) savedTeams.set(seed.id, normalizeTeam(seed));
   });
-
-  for (const team of savedTeams.values()) {
-    if (claims[team.id]) memberships.add(team.id);
-    if (team.id === "workspace-ssetc") {
-      const oldMeeting = readStorage(STORAGE_KEYS.legacyMeeting, null);
-      if (oldMeeting) team.meeting = { ...team.meeting, ...oldMeeting };
+  if (!Array.isArray(savedMemberships)) {
+    for (const team of savedTeams.values()) {
+      if (!defaultTeamIds.has(team.id)) memberships.add(team.id);
     }
   }
 
-  if (!legacyTeams.some((team) => team.id === "workspace-ssetc")) {
-    const oldProjects = readStorage(STORAGE_KEYS.legacyProjects, null);
-    if (oldProjects && typeof oldProjects === "object") {
-      const oldTasks = Object.entries(oldProjects).flatMap(([project, tasks]) => (
-        Array.isArray(tasks) ? tasks.map((task) => ({
-          ...task,
-          title: project === "website" ? task.title : `AI Healthcare: ${task.title}`
-        })) : []
-      ));
-      if (oldTasks.length) savedTeams.get("workspace-ssetc").tasks = oldTasks;
-    }
+  for (const teamId of Object.keys(claims)) {
+    if (claims[teamId] && savedTeams.has(teamId)) memberships.add(teamId);
   }
+  memberships.delete("workspace-ssetc");
 
   let teams = [...savedTeams.values()];
-  let activeTeamId = readStorage(STORAGE_KEYS.activeTeam, "workspace-ssetc");
-  let selectedHackathon = readStorage(STORAGE_KEYS.selectedHackathon, "");
-  let activeTeam = null;
   const switcher = document.querySelector("#my-team-switcher");
   const workspace = document.querySelector("#team-workspace");
+  const visibilityBadge = document.querySelector("#team-visibility-badge");
   const modal = document.querySelector("#team-modal");
   const createForm = document.querySelector("#create-team-form");
   const hackathonInput = document.querySelector("#hackathon-name");
   const codeInput = document.querySelector("#team-join-code");
   const codeField = document.querySelector("#join-code-field");
   const accessRadios = document.querySelectorAll('input[name="access"]');
-  const taskForm = document.querySelector("#add-team-task-form");
   const codeForm = document.querySelector("#join-code-form");
   const joinCodeInput = codeForm.elements.joinCode;
+  const template = document.querySelector("#team-workspace-template");
+  const selectedHackathon = readStorage(STORAGE_KEYS.selectedHackathon, "");
 
   function persistTeams() {
+    teams = [...new Map(teams.map((team) => [team.id, normalizeTeam(team)])).values()];
     writeStorage(STORAGE_KEYS.teams, teams);
     writeStorage(STORAGE_KEYS.members, [...memberships]);
+  }
+
+  function getActiveTeamId() {
+    return readStorage(
+      STORAGE_KEYS.activeTeam,
+      readStorage(STORAGE_KEYS.legacyActiveTeam, "")
+    );
+  }
+
+  function getActiveTeam() {
+    const activeTeamId = getActiveTeamId();
+    return readStorage(STORAGE_KEYS.teams, [])
+      .map(normalizeTeam)
+      .find((team) => team.id === activeTeamId && memberships.has(team.id)) || null;
+  }
+
+  function saveTeam(teamId, update) {
+    if (!teamId || teamId !== getActiveTeamId()) return null;
+    const storedTeams = readStorage(STORAGE_KEYS.teams, []);
+    const index = storedTeams.findIndex((team) => team.id === teamId);
+    if (index === -1) return null;
+    storedTeams[index] = normalizeTeam(update(normalizeTeam(storedTeams[index])));
+    writeStorage(STORAGE_KEYS.teams, storedTeams);
+    teams = storedTeams.map(normalizeTeam);
+    return storedTeams[index];
   }
 
   function renderSwitcher() {
     const myTeams = teams.filter((team) => memberships.has(team.id));
     if (!myTeams.length) {
-      switcher.innerHTML = '<span class="my-teams-empty">Create a team or join an open team to get started.</span>';
-      workspace.hidden = true;
+      switcher.innerHTML = '<span class="my-teams-empty">No teams yet — create or join one above!</span>';
+      saveActiveTeamId("");
+      renderWorkspace();
       return;
     }
-    if (!myTeams.some((team) => team.id === activeTeamId)) activeTeamId = myTeams[0].id;
+    if (!myTeams.some((team) => team.id === getActiveTeamId())) {
+      saveActiveTeamId(myTeams[0].id);
+    }
+    const activeTeamId = getActiveTeamId();
     switcher.innerHTML = myTeams.map((team) => `
       <button class="my-team-tab${team.id === activeTeamId ? " active" : ""}" type="button"
         role="tab" aria-selected="${team.id === activeTeamId}" data-team-tab="${escapeHtml(team.id)}">
@@ -328,7 +445,7 @@ function initializeTeams() {
   }
 
   function renderOpenTeams() {
-    const openTeams = teams.filter((team) => team.access === "open" && team.id !== "workspace-ssetc");
+    const openTeams = teams.filter((team) => team.access === "open");
     if (!openTeams.length) {
       teamList.innerHTML = '<div class="empty-state">No open teams yet. Create one or join with a code.</div>';
       return;
@@ -359,50 +476,157 @@ function initializeTeams() {
   }
 
   function renderWorkspace() {
-    if (!activeTeam) return;
-    document.querySelector("#workspace-title").textContent = activeTeam.name;
-    document.querySelector("#workspace-overline").textContent = activeTeam.hackathon || "HACKATHON TEAM";
-    document.querySelector("#workspace-monogram").textContent = activeTeam.name.split(/\s+/).slice(0, 2).map((word) => word[0]).join("").toUpperCase();
-    document.querySelector("#team-visibility-badge").textContent = activeTeam.access === "code" ? "Code Only" : "Open";
-    document.querySelector("#team-visibility-badge").classList.toggle("code", activeTeam.access === "code");
-    const codeDisplay = document.querySelector("#workspace-team-code");
+    const activeTeamId = getActiveTeamId();
+    const activeTeam = getActiveTeam();
+    visibilityBadge.replaceChildren();
+    visibilityBadge.classList.remove("code");
+    if (!activeTeam || !memberships.has(activeTeamId)) {
+      workspace.innerHTML = '<p class="workspace-empty">No teams yet — create or join one above!</p>';
+      return;
+    }
+
+    workspace.replaceChildren(template.content.cloneNode(true));
+    visibilityBadge.textContent = activeTeam.access === "code" ? "Code Only" : "Open";
+    visibilityBadge.classList.toggle("code", activeTeam.access === "code");
+    workspace.querySelector('[data-workspace="name"]').textContent = activeTeam.name;
+    workspace.querySelector('[data-workspace="hackathon"]').textContent = activeTeam.hackathon;
+    workspace.querySelector('[data-workspace="monogram"]').textContent = activeTeam.name.split(/\s+/).slice(0, 2).map((word) => word[0]).join("").toUpperCase();
+    const codeDisplay = workspace.querySelector('[data-workspace="code"]');
     codeDisplay.hidden = activeTeam.access !== "code";
     codeDisplay.textContent = activeTeam.access === "code" ? `JOIN CODE · ${activeTeam.code}` : "";
-    document.querySelector("#meet-time").textContent = activeTeam.meeting.time;
-    const joinMeet = document.querySelector("#join-meet");
-    joinMeet.href = activeTeam.meeting.link;
-    joinMeet.removeAttribute("aria-disabled");
+    const meeting = activeTeam.meeting;
+    const meetingDate = meeting?.dateTime ? new Date(meeting.dateTime) : null;
+    const meetingTime = meetingDate && !Number.isNaN(meetingDate.getTime())
+      ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(meetingDate)
+      : meeting?.legacyTime || "No meeting scheduled";
+    workspace.querySelector('[data-workspace="meet-time"]').textContent = meetingTime;
+    workspace.querySelector('[data-workspace="meet-topic"]').textContent = meeting?.topic || "";
+    const joinMeet = workspace.querySelector('[data-workspace="meet-link"]');
+    const validMeetLink = /^https:\/\//i.test(meeting?.link || "");
+    joinMeet.hidden = !validMeetLink;
+    if (validMeetLink) {
+      joinMeet.href = meeting.link;
+      joinMeet.removeAttribute("aria-disabled");
+    } else {
+      joinMeet.removeAttribute("href");
+      joinMeet.setAttribute("aria-disabled", "true");
+    }
+    const meetForm = workspace.querySelector('[data-action="save-meet"]');
+    meetForm.elements.topic.value = meeting?.topic || "";
+    meetForm.elements.dateTime.value = meeting?.dateTime || "";
+    meetForm.elements.link.value = meeting?.link || "";
+    meetForm.querySelector('[data-action="clear-meet"]').hidden = !meeting;
 
-    const roster = document.querySelector("#squad-roster");
-    roster.innerHTML = activeTeam.roster.map((person, index) => `
-      <span class="roster-person"><i>${escapeHtml(String(person).trim().charAt(0).toUpperCase() || "?")}</i>${escapeHtml(person)}${index === 0 && person === "You" ? '<small>YOU</small>' : ""}</span>
+    const roster = workspace.querySelector('[data-workspace="roster"]');
+    roster.innerHTML = activeTeam.roster.map((person) => `
+      <span class="roster-person"><i>${escapeHtml(String(person).trim().charAt(0).toUpperCase() || "?")}</i>${escapeHtml(person)}</span>
     `).join("") || '<span class="roster-empty">No members yet.</span>';
-    document.querySelector("#roster-count").textContent = `${activeTeam.roster.length} ${activeTeam.roster.length === 1 ? "member" : "members"}`;
+    workspace.querySelector('[data-workspace="roster-count"]').textContent = `${activeTeam.roster.length} ${activeTeam.roster.length === 1 ? "member" : "members"}`;
 
     const doneCount = activeTeam.tasks.filter((task) => task.done).length;
-    document.querySelector("#task-progress").textContent = `${doneCount}/${activeTeam.tasks.length} done`;
-    const taskList = document.querySelector("#team-task-list");
+    workspace.querySelector('[data-workspace="task-progress"]').textContent = `${doneCount}/${activeTeam.tasks.length} done`;
+    const taskList = workspace.querySelector('[data-workspace="tasks"]');
     taskList.innerHTML = activeTeam.tasks.map((task, index) => `
-      <label class="task-row${task.done ? " done" : ""}">
+      <div class="task-row${task.done ? " done" : ""}">
         <span class="task-title">${escapeHtml(task.title)}</span>
         <span class="task-owner">${escapeHtml(task.person)}</span>
         <span class="task-deadline">${escapeHtml(task.deadline)}</span>
-        <input class="task-checkbox" type="checkbox" aria-label="Mark ${escapeHtml(task.title)} done" data-task-index="${index}" ${task.done ? "checked" : ""}>
-      </label>`).join("") || '<div class="task-empty">No tasks yet. Add the first one below.</div>';
+        <input class="task-checkbox" type="checkbox" aria-label="Mark ${escapeHtml(task.title)} done" data-task-index="${index}" data-team-id="${escapeHtml(activeTeam.id)}" ${task.done ? "checked" : ""}>
+        <button class="task-delete-button" type="button" aria-label="Delete ${escapeHtml(task.title)}" data-delete-task="${index}" data-team-id="${escapeHtml(activeTeam.id)}">×</button>
+      </div>`).join("") || '<div class="task-empty">No tasks yet. Add the first one below.</div>';
     taskList.querySelectorAll(".task-checkbox").forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
-        activeTeam.tasks[Number(checkbox.dataset.taskIndex)].done = checkbox.checked;
-        persistTeams();
+        if (checkbox.dataset.teamId !== getActiveTeamId()) return;
+        const teamId = checkbox.dataset.teamId;
+        saveTeam(teamId, (team) => {
+          const task = team.tasks[Number(checkbox.dataset.taskIndex)];
+          if (task) task.done = checkbox.checked;
+          return team;
+        });
+        renderWorkspace();
+      });
+    });
+
+    workspace.querySelector('[data-action="add-task"]').addEventListener("submit", (event) => {
+      event.preventDefault();
+      const teamId = activeTeam.id;
+      if (teamId !== getActiveTeamId()) return;
+      const formData = new FormData(event.currentTarget);
+      const title = String(formData.get("task")).trim();
+      const person = String(formData.get("person")).trim();
+      const deadline = String(formData.get("deadline")).trim();
+      if (!title || !person || !deadline) return;
+      saveTeam(teamId, (team) => {
+        team.tasks.push({ title, person, deadline, done: false });
+        return team;
+      });
+      renderWorkspace();
+    });
+
+    meetForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const teamId = activeTeam.id;
+      if (teamId !== getActiveTeamId()) return;
+      const formData = new FormData(meetForm);
+      const topic = String(formData.get("topic")).trim();
+      const dateTime = String(formData.get("dateTime"));
+      const link = String(formData.get("link")).trim();
+      if (!topic || !dateTime || !/^https:\/\//i.test(link)) {
+        meetForm.elements.link.setCustomValidity("Enter a valid meeting link starting with https://.");
+        meetForm.elements.link.reportValidity();
+        return;
+      }
+      meetForm.elements.link.setCustomValidity("");
+      saveTeam(teamId, (team) => {
+        team.meeting = { topic, dateTime, link };
+        return team;
+      });
+      renderWorkspace();
+    });
+
+    meetForm.elements.link.addEventListener("input", () => meetForm.elements.link.setCustomValidity(""));
+    meetForm.querySelector('[data-action="clear-meet"]').addEventListener("click", () => {
+      const teamId = activeTeam.id;
+      if (teamId !== getActiveTeamId()) return;
+      saveTeam(teamId, (team) => {
+        team.meeting = null;
+        return team;
+      });
+      renderWorkspace();
+    });
+
+    workspace.querySelector('[data-action="add-member"]').addEventListener("submit", (event) => {
+      event.preventDefault();
+      const teamId = activeTeam.id;
+      if (teamId !== getActiveTeamId()) return;
+      const name = String(new FormData(event.currentTarget).get("member")).trim();
+      if (!name) return;
+      saveTeam(teamId, (team) => {
+        if (!team.roster.some((person) => person.toLowerCase() === name.toLowerCase())) {
+          team.roster.push(name);
+        }
+        return team;
+      });
+      renderWorkspace();
+    });
+
+    taskList.querySelectorAll("[data-delete-task]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const teamId = button.dataset.teamId;
+        if (teamId !== getActiveTeamId()) return;
+        const taskIndex = Number(button.dataset.deleteTask);
+        saveTeam(teamId, (team) => {
+          team.tasks.splice(taskIndex, 1);
+          return team;
+        });
         renderWorkspace();
       });
     });
   }
 
   function activateTeam(teamId) {
-    if (!memberships.has(teamId)) return;
-    activeTeamId = teamId;
-    activeTeam = teams.find((team) => team.id === teamId) || null;
-    writeStorage(STORAGE_KEYS.activeTeam, teamId);
+    if (!memberships.has(teamId) || !teams.some((team) => team.id === teamId)) return;
+    saveActiveTeamId(teamId);
     renderSwitcher();
     renderWorkspace();
   }
@@ -411,24 +635,27 @@ function initializeTeams() {
     const team = teams.find((item) => item.id === teamId);
     if (!team || memberships.has(team.id) || team.spots <= 0) return;
     memberships.add(team.id);
-    team.spots = Math.max(0, team.spots - 1);
-    team.roster.push("You");
+    saveActiveTeamId(team.id);
+    saveTeam(team.id, (storedTeam) => {
+      storedTeam.spots = Math.max(0, storedTeam.spots - 1);
+      if (!storedTeam.roster.includes("You")) storedTeam.roster.push("You");
+      return storedTeam;
+    });
     persistTeams();
     renderOpenTeams();
     activateTeam(team.id);
   }
 
+  persistTeams();
+  const storedActiveTeamId = readStorage(
+    STORAGE_KEYS.activeTeam,
+    readStorage(STORAGE_KEYS.legacyActiveTeam, "")
+  );
+  const firstMemberTeam = teams.find((team) => memberships.has(team.id));
+  saveActiveTeamId(memberships.has(storedActiveTeamId) ? storedActiveTeamId : firstMemberTeam?.id || "");
   renderSwitcher();
-  if (memberships.has(activeTeamId)) {
-    activeTeam = teams.find((team) => team.id === activeTeamId) || null;
-  }
-  if (!activeTeam) {
-    activeTeamId = teams.find((team) => memberships.has(team.id))?.id || "";
-    activeTeam = teams.find((team) => team.id === activeTeamId) || null;
-  }
   renderWorkspace();
   renderOpenTeams();
-  persistTeams();
 
   const openButton = document.querySelector("#open-team-form");
   function closeModal() {
@@ -460,30 +687,29 @@ function initializeTeams() {
     const formData = new FormData(createForm);
     const access = String(formData.get("access"));
     const code = String(formData.get("joinCode") || "").trim().toUpperCase();
-    if (access === "code" && teams.some((team) => team.access === "code" && team.code.toUpperCase() === code)) {
+    if (access === "code" && teams.some((team) => team.access === "code" && String(team.code || "").toUpperCase() === code)) {
       codeInput.setCustomValidity("That join code is already in use.");
       codeInput.reportValidity();
       return;
     }
     codeInput.setCustomValidity("");
     const roles = String(formData.get("roles")).split(",").map((role) => role.trim()).filter(Boolean);
-    const newTeam = normalizeTeam({
-      id: `team-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    const newTeam = normalizeTeam(createTeamRecord({
       name: String(formData.get("teamName")).trim(),
       hackathon: String(formData.get("hackathonName")).trim(),
       roles,
       access,
       code: access === "code" ? code : "",
-      spots: roles.length || 1,
-      roster: ["You"],
-      meeting: { time: "Not scheduled", link: "https://meet.google.com/" },
-      tasks: []
-    });
+      creatorName: String(formData.get("creatorName")).trim(),
+      roster: [String(formData.get("creatorName")).trim()]
+    }));
     teams.unshift(newTeam);
     memberships.add(newTeam.id);
     persistTeams();
+    saveActiveTeamId(newTeam.id);
     createForm.reset();
-    if (selectedHackathon) hackathonInput.value = selectedHackathon;
+    codeInput.setCustomValidity("");
+    hackathonInput.value = "";
     updateJoinCodeField();
     closeModal();
     renderOpenTeams();
@@ -496,7 +722,7 @@ function initializeTeams() {
     event.preventDefault();
     const input = joinCodeInput;
     const code = input.value.trim().toUpperCase();
-    const match = teams.find((team) => team.access === "code" && team.code.toUpperCase() === code);
+    const match = teams.find((team) => team.access === "code" && String(team.code || "").toUpperCase() === code);
     if (!match) {
       input.setCustomValidity("No team found for that join code.");
       input.reportValidity();
@@ -506,45 +732,19 @@ function initializeTeams() {
     codeForm.reset();
     if (!memberships.has(match.id)) {
       memberships.add(match.id);
-      match.roster.push("You");
+      saveActiveTeamId(match.id);
+      saveTeam(match.id, (team) => {
+        if (!team.roster.includes("You")) team.roster.push("You");
+        return team;
+      });
       persistTeams();
     }
     activateTeam(match.id);
   });
 
-  taskForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!activeTeam) return;
-    const formData = new FormData(taskForm);
-    const title = String(formData.get("task")).trim();
-    const person = String(formData.get("person")).trim();
-    const deadline = String(formData.get("deadline")).trim();
-    if (!title || !person || !deadline) return;
-    activeTeam.tasks.push({ title, person, deadline, done: false });
-    persistTeams();
-    taskForm.reset();
-    renderWorkspace();
-  });
-
-  document.querySelector("#edit-meet").addEventListener("click", () => {
-    if (!activeTeam) return;
-    const time = window.prompt("When is the next team meet?", activeTeam.meeting.time);
-    if (time === null) return;
-    const link = window.prompt("Paste the meeting link", activeTeam.meeting.link);
-    if (link === null) return;
-    if (!/^https:\/\//i.test(link.trim())) {
-      window.alert("Please enter a valid meeting link starting with https://.");
-      return;
-    }
-    activeTeam.meeting = { time: time.trim() || activeTeam.meeting.time, link: link.trim() };
-    persistTeams();
-    renderWorkspace();
-  });
-
   if (selectedHackathon) {
     hackathonInput.value = selectedHackathon;
     writeStorage(STORAGE_KEYS.selectedHackathon, "");
-    selectedHackathon = "";
   }
 }
 
