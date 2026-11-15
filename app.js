@@ -4,7 +4,8 @@ const STORAGE_KEYS = {
   members: "hackathonHub.myTeams",
   activeTeam: "hackathonHub.activeTeam",
   claims: "hackathonHub.claims",
-  legacyMeeting: "hackathonHub.meeting"
+  legacyMeeting: "hackathonHub.meeting",
+  legacyProjects: "hackathonHub.projects"
 };
 
 function readStorage(key, fallback) {
@@ -271,6 +272,19 @@ function initializeTeams() {
     if (team.id === "workspace-ssetc") {
       const oldMeeting = readStorage(STORAGE_KEYS.legacyMeeting, null);
       if (oldMeeting) team.meeting = { ...team.meeting, ...oldMeeting };
+    }
+  }
+
+  if (!legacyTeams.some((team) => team.id === "workspace-ssetc")) {
+    const oldProjects = readStorage(STORAGE_KEYS.legacyProjects, null);
+    if (oldProjects && typeof oldProjects === "object") {
+      const oldTasks = Object.entries(oldProjects).flatMap(([project, tasks]) => (
+        Array.isArray(tasks) ? tasks.map((task) => ({
+          ...task,
+          title: project === "website" ? task.title : `AI Healthcare: ${task.title}`
+        })) : []
+      ));
+      if (oldTasks.length) savedTeams.get("workspace-ssetc").tasks = oldTasks;
     }
   }
 
