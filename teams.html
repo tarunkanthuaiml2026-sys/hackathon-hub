@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1320">
+  <title>Hackathon Hub — Teams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-page="teams">
+  <aside class="sidebar">
+    <a class="brand" href="index.html" aria-label="Hackathon Hub home">
+      <span class="brand-mark">H<span>·</span></span>
+      <span class="brand-name">HACKATHON<br>HUB</span>
+    </a>
+    <div class="sidebar-label">WORKSPACE</div>
+    <nav class="side-nav" aria-label="Main navigation">
+      <a class="nav-link" href="index.html"><span class="nav-icon">⌂</span>Dashboard</a>
+      <a class="nav-link active" href="teams.html" aria-current="page"><span class="nav-icon">◈</span>Hackathon Teams</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-note-icon">✳</div>
+      <p>Great things happen<br>when we build together.</p>
+      <span>BUILD SOMETHING BRAVE</span>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="breadcrumb">HACKATHON HUB <span>/</span> YOUR TEAMS</div>
+      <a class="topbar-team-link" href="index.html"><span aria-hidden="true">←</span> Explore hackathons</a>
+    </header>
+    <section class="page-wrap teams-page">
+      <div class="teams-hero">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> THE PEOPLE BEHIND THE PITCH</div>
+          <h1>Better ideas.<br><span>Built together.</span></h1>
+          <p class="hero-copy">Find your people, make a plan, and turn the late-night brainstorm into something real.</p>
+        </div>
+        <button class="primary-button create-team-button" id="open-team-form" type="button"><span>＋</span> Create Team</button>
+      </div>
+
+      <section class="open-teams-section">
+        <div class="section-heading">
+          <div><span class="section-kicker">GOOD PEOPLE, GOOD PROJECTS</span><h2>Open teams <span class="heading-dot">.</span></h2></div>
+          <span class="open-status"><span class="live-dot"></span> Recruiting now</span>
+        </div>
+        <div class="open-team-grid" id="open-team-list"></div>
+      </section>
+
+      <section class="workspace-section">
+        <div class="section-heading">
+          <div><span class="section-kicker">YOUR CURRENT BUILD</span><h2>Team workspace <span class="heading-dot">.</span></h2></div>
+          <span class="workspace-label"><span>◈</span> ACTIVE PROJECT</span>
+        </div>
+        <div class="workspace-card">
+          <div class="workspace-header">
+            <div class="workspace-title-wrap">
+              <span class="project-monogram">SH</span>
+              <div><span class="workspace-overline">SSETC · CHENNAI</span><h3>SSETC Hackathon 2026</h3></div>
+            </div>
+            <span class="workspace-members"><span class="member-stack"><i>R</i><i>S</i><i>A</i></span> 3 members</span>
+          </div>
+          <section class="meet-banner">
+            <div class="meet-icon">↗</div>
+            <div class="meet-info"><span>NEXT TEAM SYNC</span><strong id="meet-time">Tomorrow, 7:00 PM</strong></div>
+            <div class="meet-actions">
+              <button class="ghost-button" id="edit-meet" type="button">Edit time / link</button>
+              <a class="meet-join-button" id="join-meet" href="https://meet.google.com/" target="_blank" rel="noopener noreferrer">Join Meet <span>↗</span></a>
+            </div>
+          </section>
+          <div class="project-list">
+            <article class="project-card" data-project="healthcare">
+              <button class="project-toggle" type="button" aria-expanded="false">
+                <span class="project-chevron">⌄</span>
+                <span class="project-name-block"><strong>AI Healthcare Prototype</strong><small>Product &amp; research</small></span>
+                <span class="progress-label" data-progress="healthcare">2/5 Tasks Done</span>
+                <span class="mini-progress"><i data-progress-bar="healthcare"></i></span>
+              </button>
+              <div class="project-content" hidden>
+                <div class="task-list" data-task-list="healthcare"></div>
+                <form class="add-task-form" data-add-task="healthcare">
+                  <input name="task" type="text" placeholder="Add a task…" aria-label="New healthcare project task" required>
+                  <input name="person" type="text" placeholder="Person" aria-label="Task owner" required>
+                  <input name="deadline" type="text" placeholder="Deadline" aria-label="Task deadline" required>
+                  <button type="submit" aria-label="Add task">＋</button>
+                </form>
+              </div>
+            </article>
+            <article class="project-card expanded" data-project="website">
+              <button class="project-toggle" type="button" aria-expanded="true">
+                <span class="project-chevron">⌄</span>
+                <span class="project-name-block"><strong>Main Website</strong><small>Frontend &amp; experience</small></span>
+                <span class="progress-label" data-progress="website"></span>
+                <span class="mini-progress"><i data-progress-bar="website"></i></span>
+              </button>
+              <div class="project-content">
+                <div class="task-list" data-task-list="website"></div>
+                <form class="add-task-form" data-add-task="website">
+                  <input name="task" type="text" placeholder="Add a task…" aria-label="New website task" required>
+                  <input name="person" type="text" placeholder="Person" aria-label="Task owner" required>
+                  <input name="deadline" type="text" placeholder="Deadline" aria-label="Task deadline" required>
+                  <button type="submit" aria-label="Add task">＋</button>
+                </form>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="team-modal" hidden>
+    <section class="team-modal" role="dialog" aria-modal="true" aria-labelledby="team-modal-title">
+      <button class="modal-close" id="close-team-form" type="button" aria-label="Close">×</button>
+      <div class="eyebrow"><span class="eyebrow-line"></span> MAKE ROOM FOR GREATNESS</div>
+      <h2 id="team-modal-title">Start a team<span class="heading-dot">.</span></h2>
+      <p class="modal-copy">Set the vibe. The right people will find you.</p>
+      <form id="create-team-form">
+        <label class="form-label" for="team-name">TEAM NAME</label>
+        <input class="form-input" id="team-name" name="teamName" placeholder="e.g. The Midnight Builders" required>
+        <label class="form-label" for="hackathon-name">HACKATHON</label>
+        <input class="form-input" id="hackathon-name" name="hackathonName" placeholder="Which hackathon are you joining?" required>
+        <label class="form-label" for="team-roles">WHO ARE YOU LOOKING FOR?</label>
+        <input class="form-input" id="team-roles" name="roles" placeholder="Frontend, AIML, designer…" required>
+        <span class="form-label access-label">WHO CAN JOIN?</span>
+        <div class="access-options">
+          <label class="access-choice"><input type="radio" name="access" value="open" checked><span><strong>Open to Anyone</strong><small>Let the right people find you</small></span></label>
+          <label class="access-choice"><input type="radio" name="access" value="code"><span><strong>Code Only</strong><small>Share a private team code</small></span></label>
+        </div>
+        <button class="primary-button modal-submit" type="submit">Create your team <span>→</span></button>
+      </form>
+    </section>
+  </div>
+</body>
+</html>
