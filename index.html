@@ -1,117 +1,899 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1320">
-  <title>Hackathon Hub — Discover</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hackathon Hub — CIT Chennai</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080d1a;
+      --sidebar: #0b1121;
+      --card: #0f172a;
+      --card-hover: #131d36;
+      --border: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #60a5fa;
+      --accent-bg: rgba(96, 165, 250, 0.14);
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 28px;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+    }
+    .brand-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: #172554;
+      border: 1px solid #1d4ed8;
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .nav-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      padding: 0 12px 10px;
+    }
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      margin-bottom: 6px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      text-align: left;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+    .nav-item.active {
+      background: #111c38;
+      border-color: #1e3a8a;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: none;
+    }
+    .nav-item.active .nav-dot { display: inline-block; }
+    .nav-badge {
+      font-size: 11px;
+      background: #1e293b;
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .sidebar-footer {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .sidebar-footer span {
+      display: block;
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      font-weight: 700;
+    }
+    /* Main */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 24px 40px 60px;
+      max-width: 1280px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #64748b;
+    }
+    /* Top-right Squad Switcher */
+    .switcher-wrap { position: relative; }
+    .switcher-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .switcher-btn:hover { border-color: var(--accent); }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+    .switcher-menu {
+      display: none;
+      position: absolute;
+      right: 0; top: 44px;
+      width: 280px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 8px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+      z-index: 50;
+    }
+    .switcher-menu.open { display: block; }
+    .switcher-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      padding: 6px 10px;
+    }
+    .switcher-item {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      padding: 9px 10px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: left;
+    }
+    .switcher-item:hover, .switcher-item.current { background: #1e293b; }
+    /* Hero & Filters */
+    .hero h1 { font-size: 38px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+    .filter-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #64748b; }
+    .pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: #172554;
+      border-color: #2563eb;
+      color: var(--accent);
+    }
+    /* Event Rows */
+    .event-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 0.8fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .event-card:hover { background: var(--card-hover); border-color: #334155; }
+    .event-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .event-org { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .elig-badges { display: flex; gap: 4px; }
+    .elig-badge {
+      font-size: 10px; font-weight: 700;
+      background: #1e293b; color: var(--accent);
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .meta-col { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prize-col { font-size: 13px; font-weight: 600; color: var(--text); }
+    .actions-col { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn {
+      padding: 9px 14px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #1e293b;
+      color: var(--text);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-green { background: rgba(52, 211, 153, 0.14); border-color: #059669; color: var(--green); }
+    .btn-amber { background: rgba(251, 191, 36, 0.14); border-color: #d97706; color: var(--amber); }
+    .btn-danger { background: rgba(248, 113, 113, 0.12); border-color: #dc2626; color: var(--red); }
+    /* Forms & Team Cards */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .panel h3 { font-size: 16px; margin-bottom: 14px; }
+    .input, select {
+      width: 100%;
+      background: #080d1a;
+      border: 1px solid #334155;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .team-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .team-card.focused { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .team-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status-Working { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.4); }
+    .status-Submitted { background: rgba(96, 165, 250, 0.15); color: var(--accent); border: 1px solid rgba(96,165,250,0.4); }
+    .member-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px; }
+    .chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .chip.creator { border-color: var(--amber); color: var(--amber); }
+    .creator-bar {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .archive-box {
+      display: none;
+      margin-top: 12px;
+      background: #080d1a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .archive-box.open { display: block; }
+    /* Archive Cards */
+    .archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .archive-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .result-banner {
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--green);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+    .setup-alert {
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid #d97706;
+      color: var(--amber);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+    @media (max-width: 900px) {
+      .sidebar { position: static; width: 100%; height: auto; flex-direction: row; align-items: center; padding: 12px 16px; }
+      .sidebar-footer, .nav-label { display: none; }
+      body { flex-direction: column; }
+      .main { margin-left: 0; padding: 20px; }
+      .event-card { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body data-page="dashboard">
+<body>
   <aside class="sidebar">
-    <a class="brand" href="index.html" aria-label="Hackathon Hub home">
-      <span class="brand-mark">H<span>·</span></span>
-      <span class="brand-name">HACKATHON<br>HUB</span>
-    </a>
-    <div class="sidebar-label">WORKSPACE</div>
-    <nav class="side-nav" aria-label="Main navigation">
-      <a class="nav-link active" href="index.html" aria-current="page"><span class="nav-icon">⌂</span>Dashboard</a>
-      <a class="nav-link" href="teams.html"><span class="nav-icon">◈</span>Hackathon Teams</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="sidebar-note-icon">✳</div>
-      <p>Your next big idea<br>starts with a team.</p>
+    <div>
+      <div class="brand">
+        <div class="brand-icon">H</div>
+        <div>HACKATHON<br>HUB</div>
+      </div>
+      <div class="nav-label">WORKSPACE</div>
+      <button class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+        <span>⌂ &nbsp;Dashboard</span>
+        <span class="nav-dot"></span>
+      </button>
+      <button class="nav-item" data-view="teams" onclick="switchView('teams')">
+        <span>❖ &nbsp;Hackathon Teams</span>
+        <span class="nav-badge" id="nav-teams-count">0</span>
+      </button>
+      <button class="nav-item" data-view="archive" onclick="switchView('archive')">
+        <span>🏆 &nbsp;Archive</span>
+        <span class="nav-badge" id="nav-archive-count">0</span>
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <strong>Your next big idea starts with a team.</strong>
       <span>BUILD SOMETHING BRAVE</span>
     </div>
   </aside>
 
-  <main class="main-content">
-    <header class="topbar">
-      <div class="breadcrumb">HACKATHON HUB <span>/</span> DISCOVER</div>
-      <a class="topbar-team-link" href="teams.html"><span class="live-dot"></span> Your team space <span aria-hidden="true">↗</span></a>
-    </header>
-    <section class="page-wrap">
-      <div class="hero-row">
-        <div>
-          <div class="eyebrow"><span class="eyebrow-line"></span> FIND YOUR NEXT CHALLENGE</div>
-          <h1>Make something<br><span>that matters.</span></h1>
-          <p class="hero-copy">Good ideas deserve a deadline. Find your hackathon, find your people, and get building.</p>
+  <main class="main">
+    <div class="topbar">
+      <div class="breadcrumb" id="breadcrumb">HACKATHON HUB / DISCOVER</div>
+      <div class="switcher-wrap">
+        <button class="switcher-btn" onclick="toggleSwitcher()">
+          <span class="status-dot"></span>
+          <span id="active-team-label">Your team space</span>
+          <span>▾</span>
+        </button>
+        <div class="switcher-menu" id="switcher-menu"></div>
+      </div>
+    </div>
+
+    <div class="setup-alert" id="firebase-warning">
+      Paste your Firebase config in <code>index.html</code> so all friends see live teams and the Archive across devices.
+    </div>
+
+    <!-- VIEW 1: DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="hero">
+        <h1>Make something <span>that matters.</span></h1>
+        <p>Auto-synced 1st-year eligible hackathons from CIT Chennai. Find your challenge and spin up your squad.</p>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>LOCATION</label>
+          <div class="pill-row" id="filter-location">
+            <button class="pill active" onclick="setFilter('location', 'All', this)">All</button>
+            <button class="pill" onclick="setFilter('location', 'Online', this)">Online</button>
+            <button class="pill" onclick="setFilter('location', 'Offline', this)">Offline</button>
+            <button class="pill" onclick="setFilter('location', 'Chennai', this)">Chennai</button>
+          </div>
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="orbit-core">✳</div>
-          <span class="orbit-label">IDEAS<br>IN MOTION</span>
-          <span class="orbit-star">✦</span>
+        <div class="filter-group">
+          <label>TEAM SIZE</label>
+          <div class="pill-row" id="filter-size">
+            <button class="pill active" onclick="setFilter('size', 'All', this)">All</button>
+            <button class="pill" onclick="setFilter('size', 'Individual', this)">Individual</button>
+            <button class="pill" onclick="setFilter('size', '1-3', this)">1–3</button>
+            <button class="pill" onclick="setFilter('size', '4+', this)">4+</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>SORT BY</label>
+          <div class="pill-row">
+            <button class="pill active" onclick="setSort('default', this)">Latest</button>
+            <button class="pill" onclick="setSort('prize', this)">Prize</button>
+          </div>
         </div>
       </div>
 
-      <section class="filter-panel" aria-label="Filter hackathons">
-        <div class="filter-group" data-filter="location">
-          <span class="filter-label">LOCATION</span>
-          <div class="filter-options">
-            <button class="filter-chip selected" type="button" data-value="All">All</button>
-            <button class="filter-chip" type="button" data-value="Online">Online</button>
-            <button class="filter-chip" type="button" data-value="Offline">Offline</button>
-            <button class="filter-chip" type="button" data-value="Chennai">Chennai</button>
-          </div>
-        </div>
-        <div class="filter-group" data-filter="teamSize">
-          <span class="filter-label">TEAM SIZE</span>
-          <div class="filter-options">
-            <button class="filter-chip selected" type="button" data-value="All">All</button>
-            <button class="filter-chip" type="button" data-value="Individual">Individual</button>
-            <button class="filter-chip" type="button" data-value="1-3">1–3</button>
-            <button class="filter-chip" type="button" data-value="4+">4+</button>
-          </div>
-        </div>
-        <div class="filter-group sort-group" data-filter="sort">
-          <span class="filter-label">SORT BY</span>
-          <div class="filter-options">
-            <button class="filter-chip selected" type="button" data-value="deadline">Deadline <span>↕</span></button>
-            <button class="filter-chip" type="button" data-value="prize">Prize <span>↕</span></button>
-          </div>
-        </div>
-      </section>
-
-      <div class="section-heading">
-        <div><span class="section-kicker">THE LINEUP</span><h2>Open for ideas <span class="heading-dot">.</span></h2></div>
-        <span class="result-count" id="result-count"></span>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h2 style="font-size:20px;">Open for ideas<span style="color:var(--accent)">.</span></h2>
+        <span style="font-size:12px;color:var(--muted);" id="events-count">0 events</span>
       </div>
-      <section class="hackathon-list" id="hackathon-list" aria-label="Hackathons" aria-live="polite">
-        <div class="empty-state">Loading first-year-eligible hackathons…</div>
-      </section>
-      <p class="page-footnote"><span>✳</span> The best time to start is before the deadline.</p>
+      <div id="events-list"></div>
+    </section>
+
+    <!-- VIEW 2: HACKATHON TEAMS -->
+    <section id="view-teams" class="view">
+      <div class="hero">
+        <h1>Active <span>Squads.</span></h1>
+        <p>Create a team, join with a code, switch between your joined teams at the top right, and track live status.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>+ Create New Team</h3>
+          <input class="input" id="create-hackathon" placeholder="Hackathon Name (e.g. Buildathon)" />
+          <input class="input" id="create-team-name" placeholder="Team Name (e.g. Neural Ninjas)" />
+          <input class="input" id="create-creator-name" placeholder="Your Name (Team Creator)" />
+          <input class="input" id="create-meet-link" placeholder="Optional G Meet / Discord Link" />
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="createTeam()">Create Team Space</button>
+        </div>
+
+        <div class="panel">
+          <h3>Join an Existing Team</h3>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Enter the 5-character Join Code shared by your squad creator to add this team to your switcher.</p>
+          <input class="input" id="join-code-input" placeholder="Join Code (e.g. CIT42)" style="text-transform:uppercase;" />
+          <input class="input" id="join-member-name" placeholder="Your Name" />
+          <button class="btn btn-green" style="width:100%;justify-content:center;" onclick="joinTeam()">Join Squad</button>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom:14px;">All Live Teams (<span id="live-teams-count">0</span>)</h3>
+      <div id="teams-list"></div>
+    </section>
+
+    <!-- VIEW 3: ARCHIVE -->
+    <section id="view-archive" class="view">
+      <div class="hero">
+        <h1>Squad <span>Archive.</span></h1>
+        <p>Completed hackathons, team rosters, and final results visible to everyone.</p>
+      </div>
+      <div class="archive-grid" id="archive-list"></div>
     </section>
   </main>
 
-  <div class="modal-backdrop" id="start-team-modal" hidden>
-    <section class="team-modal" role="dialog" aria-modal="true" aria-labelledby="start-team-modal-title">
-      <button class="modal-close" id="close-start-team-modal" type="button" aria-label="Close">×</button>
-      <div class="eyebrow"><span class="eyebrow-line"></span> BUILD YOUR NEXT BIG IDEA</div>
-      <h2 id="start-team-modal-title">Start a team<span class="heading-dot">.</span></h2>
-      <p class="modal-copy">Create a team for <strong id="start-team-hackathon"></strong>.</p>
-      <form id="start-team-form">
-        <label class="form-label" for="start-team-name">TEAM NAME</label>
-        <input class="form-input" id="start-team-name" name="teamName" placeholder="e.g. The Midnight Builders" required>
-        <label class="form-label" for="start-team-creator">YOUR NAME</label>
-        <input class="form-input" id="start-team-creator" name="creatorName" placeholder="How teammates will know you" required>
-        <span class="form-label access-label">WHO CAN JOIN?</span>
-        <div class="access-options">
-          <label class="access-choice"><input type="radio" name="startAccess" value="open" checked><span><strong>Open</strong><small>Anyone can join from the list</small></span></label>
-          <label class="access-choice"><input type="radio" name="startAccess" value="code"><span><strong>Code Only</strong><small>Join with your private code</small></span></label>
-        </div>
-        <div class="join-code-field" id="start-team-code-field" hidden>
-          <label class="form-label" for="start-team-code">CUSTOM JOIN CODE</label>
-          <input class="form-input" id="start-team-code" name="joinCode" placeholder="e.g. ROBO-27" autocomplete="off">
-        </div>
-        <button class="primary-button modal-submit" type="submit">Create your team <span>→</span></button>
-      </form>
-    </section>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, arrayUnion
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    // =========================================================
+    // PASTE YOUR FIREBASE CONFIG HERE
+    // =========================================================
+     const firebaseConfig = {
+    apiKey: "AIzaSyBfmcdz-k8DjKrJUk78pBcYK3TwjE9esSA",
+    authDomain: "aaaaaa-4288e.firebaseapp.com",
+    projectId: "aaaaaa-4288e",
+    storageBucket: "aaaaaa-4288e.firebasestorage.app",
+    messagingSenderId: "991853398349",
+    appId: "1:991853398349:web:e61fc0d07c8822fe80cf04"
+    };
+    
+
+    // Browser identity for creator-only permissions
+    let myBrowserId = localStorage.getItem('hh_browser_id');
+    if (!myBrowserId) {
+      myBrowserId = 'br_' + Math.random().toString(36).slice(2, 11) + Date.now().toString(36);
+      localStorage.setItem('hh_browser_id', myBrowserId);
+    }
+
+    let joinedTeamIds = JSON.parse(localStorage.getItem('hh_joined_teams') || '[]');
+    let focusedTeamId = localStorage.getItem('hh_focused_team') || '';
+
+    let allEvents = [];
+    let allTeams = [];
+    let allArchive = [];
+    let filterState = { location: 'All', size: 'All', sort: 'default' };
+
+    const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('PASTE_');
+    let db = null;
+
+    if (isConfigured) {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+
+      onSnapshot(collection(db, 'teams'), (snap) => {
+        allTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        renderTeams();
+        renderSwitcher();
+      });
+
+      onSnapshot(collection(db, 'archive'), (snap) => {
+        allArchive = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.archivedAt || 0) - (a.archivedAt || 0));
+        renderArchive();
+      });
+    } else {
+      document.getElementById('firebase-warning').style.display = 'block';
+    }
+
+    // Load synced CIT Chennai hackathons
+    fetch('hackathons.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        allEvents = Array.isArray(data) ? data : [];
+        renderEvents();
+      })
+      .catch(() => { allEvents = []; renderEvents(); });
+
+    function esc(str) {
+      return String(str || '').replace(/[&<>"']/g, s => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[s]));
+    }
+
+    window.switchView = (view) => {
+      document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.getElementById('view-' + view).classList.add('active');
+      document.querySelector(`.nav-item[data-view="${view}"]`).classList.add('active');
+      const labels = { dashboard: 'DISCOVER', teams: 'HACKATHON TEAMS', archive: 'ARCHIVE' };
+      document.getElementById('breadcrumb').textContent = 'HACKATHON HUB / ' + labels[view];
+    };
+
+    window.startTeamForEvent = (title) => {
+      document.getElementById('create-hackathon').value = title;
+      switchView('teams');
+      document.getElementById('create-team-name').focus();
+    };
+
+    window.setFilter = (type, val, btn) => {
+      filterState[type] = val;
+      btn.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      renderEvents();
+    };
+
+    window.setSort = (val, btn) => {
+      filterState.sort = val;
+      btn.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      renderEvents();
+    };
+
+    function renderEvents() {
+      let list = [...allEvents];
+      if (filterState.location !== 'All') {
+        list = list.filter(e => (e.location || '').toLowerCase().includes(filterState.location.toLowerCase()));
+      }
+      if (filterState.size !== 'All') {
+        list = list.filter(e => {
+          const s = (e.teamSize || '').toLowerCase();
+          if (filterState.size === 'Individual') return s.includes('1') || s.includes('individual');
+          if (filterState.size === '1-3') return /[123]/.test(s);
+          if (filterState.size === '4+') return /[456]/.test(s);
+          return true;
+        });
+      }
+      if (filterState.sort === 'prize') {
+        list.sort((a, b) => {
+          const numA = parseInt((a.prize || '').replace(/[^\d]/g, '')) || 0;
+          const numB = parseInt((b.prize || '').replace(/[^\d]/g, '')) || 0;
+          return numB - numA;
+        });
+      }
+
+      document.getElementById('events-count').textContent = `${list.length} events`;
+      const container = document.getElementById('events-list');
+      if (!list.length) {
+        container.innerHTML = `<div class="panel" style="text-align:center;color:var(--muted);">No first-year-eligible hackathons match these filters.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(e => {
+        const title = e.title || e.name || 'Hackathon';
+        const regUrl = e.registerUrl || e.link || '#';
+        return `
+          <div class="event-card">
+            <div>
+              <div class="event-title">${esc(title)}</div>
+              <div class="event-org">${esc(e.organizer || 'CIT Chennai')}</div>
+              <div class="elig-badges">
+                <span class="elig-badge">${esc(e.eligibility || 'I, II, III, IV')}</span>
+              </div>
+            </div>
+            <div class="meta-col">📍 ${esc(e.location || 'Online')} &nbsp;•&nbsp; 👥 ${esc(e.teamSize || '1–4 people')}</div>
+            <div class="prize-col">${esc(e.prize || 'See Details')}</div>
+            <div class="meta-col">${esc(e.deadline || 'Open')}</div>
+            <div class="actions-col">
+              ${regUrl !== '#' ? `<a class="btn" href="${esc(regUrl)}" target="_blank" rel="noopener">Register ↗</a>` : ''}
+              <button class="btn btn-primary" onclick="startTeamForEvent('${esc(title).replace(/'/g, "\\'")}')">Start Team →</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveJoinedLocal(teamId) {
+      if (!joinedTeamIds.includes(teamId)) {
+        joinedTeamIds.push(teamId);
+        localStorage.setItem('hh_joined_teams', JSON.stringify(joinedTeamIds));
+      }
+      focusedTeamId = teamId;
+      localStorage.setItem('hh_focused_team', focusedTeamId);
+      renderSwitcher();
+    }
+
+    window.createTeam = async () => {
+      if (!db) return alert('Paste your Firebase config in index.html first!');
+      const hackathonName = document.getElementById('create-hackathon').value.trim();
+      const teamName = document.getElementById('create-team-name').value.trim();
+      const creatorName = document.getElementById('create-creator-name').value.trim();
+      const meetLink = document.getElementById('create-meet-link').value.trim();
+
+      if (!hackathonName || !teamName || !creatorName) {
+        return alert('Please fill in Hackathon Name, Team Name, and Your Name.');
+      }
+
+      const teamId = 'team_' + Date.now().toString(36);
+      const joinCode = 'CIT' + Math.floor(10 + Math.random() * 89);
+
+      await setDoc(doc(db, 'teams', teamId), {
+        hackathonName,
+        teamName,
+        creatorName,
+        creatorId: myBrowserId,
+        joinCode,
+        meetLink,
+        status: 'Working',
+        members: [creatorName],
+        createdAt: Date.now()
+      });
+
+      document.getElementById('create-team-name').value = '';
+      document.getElementById('create-meet-link').value = '';
+      saveJoinedLocal(teamId);
+    };
+
+    window.joinTeam = async () => {
+      if (!db) return alert('Paste your Firebase config in index.html first!');
+      const code = document.getElementById('join-code-input').value.trim().toUpperCase();
+      const memberName = document.getElementById('join-member-name').value.trim();
+      if (!code || !memberName) return alert('Enter both the Join Code and Your Name.');
+
+      const match = allTeams.find(t => (t.joinCode || '').toUpperCase() === code);
+      if (!match) return alert('No active team found with code: ' + code);
+
+      await updateDoc(doc(db, 'teams', match.id), {
+        members: arrayUnion(memberName)
+      });
+
+      document.getElementById('join-code-input').value = '';
+      saveJoinedLocal(match.id);
+      renderTeams();
+    };
+
+    window.toggleTeamStatus = async (teamId, currentStatus) => {
+      const nextStatus = currentStatus === 'Working' ? 'Submitted' : 'Working';
+      await updateDoc(doc(db, 'teams', teamId), { status: nextStatus });
+    };
+
+    window.openArchivePrompt = (teamId) => {
+      document.getElementById('archive-box-' + teamId).classList.toggle('open');
+    };
+
+    window.confirmArchiveTeam = async (teamId) => {
+      const team = allTeams.find(t => t.id === teamId);
+      if (!team || team.creatorId !== myBrowserId) return;
+      const resultText = document.getElementById('result-input-' + teamId).value.trim() || 'Completed';
+
+      await setDoc(doc(db, 'archive', teamId), {
+        teamName: team.teamName,
+        hackathonName: team.hackathonName,
+        members: team.members || [team.creatorName],
+        result: resultText,
+        creatorId: team.creatorId,
+        archivedAt: Date.now()
+      });
+
+      await deleteDoc(doc(db, 'teams', teamId));
+    };
+
+    window.deleteTeam = async (teamId) => {
+      const team = allTeams.find(t => t.id === teamId);
+      if (!team || team.creatorId !== myBrowserId) return;
+      if (!confirm(`Delete team "${team.teamName}" permanently?`)) return;
+      await deleteDoc(doc(db, 'teams', teamId));
+    };
+
+    window.deleteArchiveItem = async (archId) => {
+      if (!confirm('Remove this entry from Archive?')) return;
+      await deleteDoc(doc(db, 'archive', archId));
+    };
+
+    window.toggleSwitcher = () => {
+      document.getElementById('switcher-menu').classList.toggle('open');
+    };
+
+    window.focusTeam = (teamId) => {
+      focusedTeamId = teamId;
+      localStorage.setItem('hh_focused_team', teamId);
+      document.getElementById('switcher-menu').classList.remove('open');
+      switchView('teams');
+      renderTeams();
+      renderSwitcher();
+    };
+
+    function renderSwitcher() {
+      const myTeams = allTeams.filter(t => joinedTeamIds.includes(t.id) || t.creatorId === myBrowserId);
+      const active = myTeams.find(t => t.id === focusedTeamId) || myTeams[0];
+      document.getElementById('active-team-label').textContent = active ? active.teamName : 'Your team space';
+
+      const menu = document.getElementById('switcher-menu');
+      if (!myTeams.length) {
+        menu.innerHTML = `<div class="switcher-header">JOINED TEAMS</div><div style="padding:10px;font-size:12px;color:var(--muted);">No teams joined yet.</div>`;
+        return;
+      }
+
+      menu.innerHTML = `<div class="switcher-header">SWITCH JOINED TEAM</div>` + myTeams.map(t => `
+        <button class="switcher-item ${active && active.id === t.id ? 'current' : ''}" onclick="focusTeam('${t.id}')">
+          <span><strong>${esc(t.teamName)}</strong><br><small style="color:var(--muted)">${esc(t.hackathonName)}</small></span>
+          <span class="status-pill status-${esc(t.status || 'Working')}">${esc(t.status || 'Working')}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderTeams() {
+      document.getElementById('nav-teams-count').textContent = allTeams.length;
+      document.getElementById('live-teams-count').textContent = allTeams.length;
+      const container = document.getElementById('teams-list');
+
+      if (!allTeams.length) {
+        container.innerHTML = `<div class="panel" style="color:var(--muted);text-align:center;">No active teams yet. Create one above!</div>`;
+        return;
+      }
+
+      // Put focused team first
+      const sorted = [...allTeams].sort((a, b) => (a.id === focusedTeamId ? -1 : b.id === focusedTeamId ? 1 : 0));
+
+      container.innerHTML = sorted.map(t => {
+        const isCreator = t.creatorId === myBrowserId;
+        const members = t.members || [];
+        return `
+          <div class="team-card ${t.id === focusedTeamId ? 'focused' : ''}">
+            <div class="team-header">
+              <div>
+                <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:3px;">${esc(t.hackathonName)}</div>
+                <h3 style="font-size:20px;">${esc(t.teamName)} ${isCreator ? '<span title="You created this team">👑</span>' : ''}</h3>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span class="chip">Code: <strong>${esc(t.joinCode)}</strong></span>
+                <span class="status-pill status-${esc(t.status || 'Working')}">${esc(t.status || 'Working')}</span>
+              </div>
+            </div>
+
+            ${t.meetLink ? `<div style="margin-bottom:10px;font-size:13px;">🔗 Meet: <a href="${esc(t.meetLink)}" target="_blank" style="color:var(--accent);">${esc(t.meetLink)}</a></div>` : ''}
+
+            <div style="font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.08em;">TEAM MEMBERS (${members.length})</div>
+            <div class="member-chips">
+              ${members.map((m, idx) => `<span class="chip ${idx === 0 ? 'creator' : ''}">${esc(m)}${idx === 0 ? ' (Creator)' : ''}</span>`).join('')}
+            </div>
+
+            ${isCreator ? `
+              <div class="creator-bar">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button class="btn btn-amber" onclick="toggleTeamStatus('${t.id}', '${esc(t.status || 'Working')}')">
+                    Mark as ${t.status === 'Submitted' ? 'Working' : 'Submitted'}
+                  </button>
+                  <button class="btn btn-green" onclick="openArchivePrompt('${t.id}')">🏆 Send to Archive</button>
+                </div>
+                <button class="btn btn-danger" onclick="deleteTeam('${t.id}')">Delete Team</button>
+              </div>
+              <div class="archive-box" id="archive-box-${t.id}">
+                <label style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px;">
+                  Enter your result (e.g. <em>Won 1st Place</em> or <em>Reached Round 2</em>):
+                </label>
+                <div style="display:flex;gap:8px;">
+                  <input class="input" style="margin-bottom:0;" id="result-input-${t.id}" placeholder="e.g. Won 1st Place / Reached Round 2" />
+                  <button class="btn btn-green" onclick="confirmArchiveTeam('${t.id}')">Archive Now</button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderArchive() {
+      document.getElementById('nav-archive-count').textContent = allArchive.length;
+      const container = document.getElementById('archive-list');
+
+      if (!allArchive.length) {
+        container.innerHTML = `<div class="panel" style="color:var(--muted);text-align:center;grid-column:1/-1;">No archived teams yet. When a team creator sends a finished team to Archive, it appears here for everyone.</div>`;
+        return;
+      }
+
+      container.innerHTML = allArchive.map(a => {
+        const isCreator = a.creatorId === myBrowserId;
+        const members = a.members || [];
+        return `
+          <div class="archive-card">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                <span style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.06em;">${esc(a.hackathonName)}</span>
+                ${isCreator ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteArchiveItem('${a.id}')">Delete</button>` : ''}
+              </div>
+              <h3 style="font-size:20px;margin-top:4px;">${esc(a.teamName)}</h3>
+              <div class="result-banner">🏆 ${esc(a.result)}</div>
+              <div style="font-size:11px;font-weight:700;color:#64748b;letter-spacing:0.08em;margin-top:10px;">TEAM MEMBERS</div>
+              <div class="member-chips" style="margin-bottom:0;">
+                ${members.map(m => `<span class="chip">${esc(m)}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  </script>
 </body>
 </html>
