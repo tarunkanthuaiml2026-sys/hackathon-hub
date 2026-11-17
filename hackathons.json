@@ -1,5 +1,18 @@
 [
   {
+    "id": "agentic-ai-in-bfsi",
+    "title": "Agentic AI in BFSI",
+    "name": "Agentic AI in BFSI",
+    "organizer": "IIT Bombay",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 1,00,000",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://unstop.com/hackathons/agentic-ai-in-bfsi-hackathon-iit-bombay-1800857",
+    "registerUrl": "https://unstop.com/hackathons/agentic-ai-in-bfsi-hackathon-iit-bombay-1800857"
+  },
+  {
     "id": "robowars-2027",
     "title": "Robowars 2027",
     "name": "Robowars 2027",
@@ -518,18 +531,5 @@
     "deadline": "Open",
     "link": "https://docs.google.com/forms/d/e/1FAIpQLSc4dvvDmBSBkdpUujhVltGGYgPMkS5dXm3HvoU2xj6XyknYfw/viewform",
     "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSc4dvvDmBSBkdpUujhVltGGYgPMkS5dXm3HvoU2xj6XyknYfw/viewform"
-  },
-  {
-    "id": "vconnectech-engineering-marathon",
-    "title": "VConnecTech Engineering Marathon",
-    "name": "VConnecTech Engineering Marathon",
-    "organizer": "VConnecTech",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹2,75,000",
-    "teamSize": "4 - 5",
-    "deadline": "Open",
-    "link": "https://docs.google.com/forms/d/1nnBQpB98BdhGOzty5amZDDyz1y1WTlItw1qluxSioMg/viewform?ts=6aaa8a48&edit_requested=true",
-    "registerUrl": "https://docs.google.com/forms/d/1nnBQpB98BdhGOzty5amZDDyz1y1WTlItw1qluxSioMg/viewform?ts=6aaa8a48&edit_requested=true"
   }
 ]
