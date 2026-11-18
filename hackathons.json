@@ -1,5 +1,31 @@
 [
   {
+    "id": "bharat-pitchathon-5-0",
+    "title": "Bharat Pitchathon 5.0",
+    "name": "Bharat Pitchathon 5.0",
+    "organizer": "Headstart Network Foundation",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  TBA",
+    "teamSize": "1–4 people",
+    "deadline": "Open",
+    "link": "https://www.headstart.in/bharat-pitchathon",
+    "registerUrl": "https://www.headstart.in/bharat-pitchathon"
+  },
+  {
+    "id": "ai-vibeathon-2026",
+    "title": "AI VIBEATHON 2026",
+    "name": "AI VIBEATHON 2026",
+    "organizer": "Echo Engineers in collaboration with PromptWars. The ev",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹50,000",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://hack2skill.com/event/promptwars-x-aivibeathon2026?utm_source=hack2skill&utm_medium=homepage&sectionid=6aed9df86808a5c6d6f86407",
+    "registerUrl": "https://hack2skill.com/event/promptwars-x-aivibeathon2026?utm_source=hack2skill&utm_medium=homepage&sectionid=6aed9df86808a5c6d6f86407"
+  },
+  {
     "id": "agentic-ai-in-bfsi",
     "title": "Agentic AI in BFSI",
     "name": "Agentic AI in BFSI",
@@ -325,19 +351,6 @@
     "registerUrl": "https://unstop.com/competitions/crp-voyagehack-40-tbocom-1774031?ref=Explore_Banner_Link"
   },
   {
-    "id": "tn-botify",
-    "title": "TN-BOTIFY",
-    "name": "TN-BOTIFY",
-    "organizer": "TANCAM & Dassault Systèmes",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹10,00,000",
-    "teamSize": "1 - 4",
-    "deadline": "Open",
-    "link": "https://www.tnbotify.tancam.in/",
-    "registerUrl": "https://www.tnbotify.tancam.in/"
-  },
-  {
     "id": "future-health-digital-innovation-challenge",
     "title": "Future Health Digital Innovation Challenge",
     "name": "Future Health Digital Innovation Challenge",
@@ -505,31 +518,5 @@
     "deadline": "Open",
     "link": "https://challenges.rtih.co.in/challenge/rtih-pushkaralu",
     "registerUrl": "https://challenges.rtih.co.in/challenge/rtih-pushkaralu"
-  },
-  {
-    "id": "create-ai-agents-championship",
-    "title": "Create AI Agents Championship",
-    "name": "Create AI Agents Championship",
-    "organizer": "Dubai Chamber",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  USD 150,000 grant",
-    "teamSize": "1 - 6",
-    "deadline": "Open",
-    "link": "https://www.dubaichamberdigital.com/en/create-ai-agents",
-    "registerUrl": "https://www.dubaichamberdigital.com/en/create-ai-agents"
-  },
-  {
-    "id": "mabif-s-jallikattu-5-0",
-    "title": "MABIF's Jallikattu 5.0",
-    "name": "MABIF's Jallikattu 5.0",
-    "organizer": "NABARD, MABIF",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹2.5 lakh",
-    "teamSize": "2 - 5",
-    "deadline": "Open",
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLSc4dvvDmBSBkdpUujhVltGGYgPMkS5dXm3HvoU2xj6XyknYfw/viewform",
-    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSc4dvvDmBSBkdpUujhVltGGYgPMkS5dXm3HvoU2xj6XyknYfw/viewform"
   }
 ]
