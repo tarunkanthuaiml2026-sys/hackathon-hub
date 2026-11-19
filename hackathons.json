@@ -1,5 +1,31 @@
 [
   {
+    "id": "hack-shaktidb",
+    "title": "Hack ShaktiDB",
+    "name": "Hack ShaktiDB",
+    "organizer": "IITM Pravartak",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 1,25,000",
+    "teamSize": "1 - 3",
+    "deadline": "Open",
+    "link": "https://shaktidb.iitmpravartak.net/",
+    "registerUrl": "https://shaktidb.iitmpravartak.net/"
+  },
+  {
+    "id": "rack-it-up-2026",
+    "title": "Rack It Up 2026",
+    "name": "Rack It Up 2026",
+    "organizer": "Karma Enterprises",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  Certificates and Goodies",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://rackitup.karmaenterprises.tech/#themes",
+    "registerUrl": "https://rackitup.karmaenterprises.tech/#themes"
+  },
+  {
     "id": "bharat-pitchathon-5-0",
     "title": "Bharat Pitchathon 5.0",
     "name": "Bharat Pitchathon 5.0",
@@ -492,31 +518,5 @@
     "deadline": "Open",
     "link": "https://unstop.com/o/Le3ERgU?lb=55sPRIw6&utm_medium=Share&utm_source=nithir25611&utm_campaign=Online_coding_challenge",
     "registerUrl": "https://unstop.com/o/Le3ERgU?lb=55sPRIw6&utm_medium=Share&utm_source=nithir25611&utm_campaign=Online_coding_challenge"
-  },
-  {
-    "id": "myosa-7-0",
-    "title": "MYOSA 7.0",
-    "name": "MYOSA 7.0",
-    "organizer": "IEEE",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  $1000",
-    "teamSize": "2 - 4",
-    "deadline": "Open",
-    "link": "https://sites.google.com/view/myosa-event-ieee-sensors/home?utm_source=gemini&pli=1&authuser=0",
-    "registerUrl": "https://sites.google.com/view/myosa-event-ieee-sensors/home?utm_source=gemini&pli=1&authuser=0"
-  },
-  {
-    "id": "godavari-pushkaralu-2027",
-    "title": "Godavari Pushkaralu 2027",
-    "name": "Godavari Pushkaralu 2027",
-    "organizer": "RTIH",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  Funding",
-    "teamSize": "1–4 people",
-    "deadline": "Open",
-    "link": "https://challenges.rtih.co.in/challenge/rtih-pushkaralu",
-    "registerUrl": "https://challenges.rtih.co.in/challenge/rtih-pushkaralu"
   }
 ]
