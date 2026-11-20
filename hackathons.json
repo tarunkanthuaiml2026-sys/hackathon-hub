@@ -1,5 +1,44 @@
 [
   {
+    "id": "greenovate-2026",
+    "title": "GREENOVATE 2026",
+    "name": "GREENOVATE 2026",
+    "organizer": "GVIIF",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  Incubation Support",
+    "teamSize": "2 - 4",
+    "deadline": "Open",
+    "link": "https://docs.google.com/forms/d/e/",
+    "registerUrl": "https://docs.google.com/forms/d/e/"
+  },
+  {
+    "id": "tech4bharath",
+    "title": "Tech4Bharath",
+    "name": "Tech4Bharath",
+    "organizer": "Karnataka Arya Vysya Mahasabha",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹15 lakh",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://hackculture.io/hackathons/tech4bharat-gavs-hackathon",
+    "registerUrl": "https://hackculture.io/hackathons/tech4bharat-gavs-hackathon"
+  },
+  {
+    "id": "i-hack",
+    "title": "i-Hack",
+    "name": "i-Hack",
+    "organizer": "E-Cell, which bring together aspiring product managers,",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 2,00,000",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://www.ecell.in/esummit/ihack",
+    "registerUrl": "https://www.ecell.in/esummit/ihack"
+  },
+  {
     "id": "hack-shaktidb",
     "title": "Hack ShaktiDB",
     "name": "Hack ShaktiDB",
@@ -505,18 +544,5 @@
     "deadline": "Open",
     "link": "https://paypalaihackathon.devpost.com/",
     "registerUrl": "https://paypalaihackathon.devpost.com/"
-  },
-  {
-    "id": "hackbuild-26",
-    "title": "HackBuild ’26",
-    "name": "HackBuild ’26",
-    "organizer": "GDG on Campus CIT",
-    "location": "Chennai",
-    "eligibility": "I",
-    "prize": "Amount:  Goodies",
-    "teamSize": "1 - 3",
-    "deadline": "Open",
-    "link": "https://unstop.com/o/Le3ERgU?lb=55sPRIw6&utm_medium=Share&utm_source=nithir25611&utm_campaign=Online_coding_challenge",
-    "registerUrl": "https://unstop.com/o/Le3ERgU?lb=55sPRIw6&utm_medium=Share&utm_source=nithir25611&utm_campaign=Online_coding_challenge"
   }
 ]
