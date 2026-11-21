@@ -1,5 +1,44 @@
 [
   {
+    "id": "idex-innovations-for-defence-excellence-",
+    "title": "iDEX (Innovations for Defence Excellence)",
+    "name": "iDEX (Innovations for Defence Excellence)",
+    "organizer": "Defence Innovation Organisation (DIO)",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount: Funding Up to ₹1.5 crore under DISC",
+    "teamSize": "Individual",
+    "deadline": "Open",
+    "link": "https://idex.gov.in//disc-category/VlAzd0QxdGVhQ05jZlpNenF6eit6UT09OjpEaXh0WjZRQVlCbFFrZDRBc25UVE93PT0=",
+    "registerUrl": "https://idex.gov.in//disc-category/VlAzd0QxdGVhQ05jZlpNenF6eit6UT09OjpEaXh0WjZRQVlCbFFrZDRBc25UVE93PT0="
+  },
+  {
+    "id": "silicon-sprint-2026",
+    "title": "Silicon Sprint 2026",
+    "name": "Silicon Sprint 2026",
+    "organizer": "IEEE NITK Surathkal & IEEE BITS Pilani Hyderabad Campus",
+    "location": "Online",
+    "eligibility": "I, II, III",
+    "prize": "Amount: ₹1,00,000",
+    "teamSize": "2 - 3",
+    "deadline": "Open",
+    "link": "https://unstop.com/hackathons/silicon-sprint-2026-nitk-surathkal-1814263",
+    "registerUrl": "https://unstop.com/hackathons/silicon-sprint-2026-nitk-surathkal-1814263"
+  },
+  {
+    "id": "dsci-cybersecurity-hackathon-2026",
+    "title": "DSCI Cybersecurity Hackathon 2026",
+    "name": "DSCI Cybersecurity Hackathon 2026",
+    "organizer": "Data Security Council of India (DSCI)",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 2,50,000",
+    "teamSize": "1 - 2",
+    "deadline": "Open",
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLSclRQG4l2PExpJO_C-LsU7mychrdiWLtlL6bk1xmIQsgOaUVw/viewform?clid=eyJpIjoiUF9TNnc3dnZNLTdMXzZDdXk1akxGIiwiaCI6IiIsInAiOiIvR1NMSCIsInQiOjE3OTUwNTgyMTV9.muOQ9TJL5qQ4k7udj6QQGLsbaBHnhiDbqapPAfAixT4",
+    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSclRQG4l2PExpJO_C-LsU7mychrdiWLtlL6bk1xmIQsgOaUVw/viewform?clid=eyJpIjoiUF9TNnc3dnZNLTdMXzZDdXk1akxGIiwiaCI6IiIsInAiOiIvR1NMSCIsInQiOjE3OTUwNTgyMTV9.muOQ9TJL5qQ4k7udj6QQGLsbaBHnhiDbqapPAfAixT4"
+  },
+  {
     "id": "greenovate-2026",
     "title": "GREENOVATE 2026",
     "name": "GREENOVATE 2026",
@@ -518,31 +557,5 @@
     "deadline": "Open",
     "link": "https://nrp.gov.sg/SGEAIchallenge/",
     "registerUrl": "https://nrp.gov.sg/SGEAIchallenge/"
-  },
-  {
-    "id": "web3wave-hackathon",
-    "title": "Web3Wave Hackathon",
-    "name": "Web3Wave Hackathon",
-    "organizer": "Tezos Nexus CIT",
-    "location": "Online",
-    "eligibility": "I",
-    "prize": "Amount:  Certificates and Goodies",
-    "teamSize": "2 - 4",
-    "deadline": "Open",
-    "link": "https://tezosnexuscit.vercel.app/hackathon",
-    "registerUrl": "https://tezosnexuscit.vercel.app/hackathon"
-  },
-  {
-    "id": "paypal-ai-hackathon",
-    "title": "PayPal AI Hackathon",
-    "name": "PayPal AI Hackathon",
-    "organizer": "PayPal",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  $67,500 USD",
-    "teamSize": "1 - 5",
-    "deadline": "Open",
-    "link": "https://paypalaihackathon.devpost.com/",
-    "registerUrl": "https://paypalaihackathon.devpost.com/"
   }
 ]
