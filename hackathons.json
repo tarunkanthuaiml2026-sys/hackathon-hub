@@ -1,5 +1,31 @@
 [
   {
+    "id": "surakshit-bharat-innovation-challenge",
+    "title": "Surakshit Bharat Innovation Challenge",
+    "name": "Surakshit Bharat Innovation Challenge",
+    "organizer": "Ministry of Home Affairs",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹2,25,000",
+    "teamSize": "5 - 6",
+    "deadline": "Open",
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLSctBLG3kJjCb9zwUAzqk76loLCAK92CtVi0IoX9-MGjY9XQdQ/viewform",
+    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSctBLG3kJjCb9zwUAzqk76loLCAK92CtVi0IoX9-MGjY9XQdQ/viewform"
+  },
+  {
+    "id": "rajasthan-police-hackathon-2026",
+    "title": "Rajasthan Police Hackathon 2026",
+    "name": "Rajasthan Police Hackathon 2026",
+    "organizer": "Rajasthan Police",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 5,00,000",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://rajasthanpolicehackathon.in/",
+    "registerUrl": "https://rajasthanpolicehackathon.in/"
+  },
+  {
     "id": "idex-innovations-for-defence-excellence-",
     "title": "iDEX (Innovations for Defence Excellence)",
     "name": "iDEX (Innovations for Defence Excellence)",
@@ -505,57 +531,5 @@
     "deadline": "Open",
     "link": "https://youthideathon.in/",
     "registerUrl": "https://youthideathon.in/"
-  },
-  {
-    "id": "zeckathon",
-    "title": "Zeckathon",
-    "name": "Zeckathon",
-    "organizer": "Indian Institute of Technology (IIT), Patna",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹ 40,000 + PPI",
-    "teamSize": "1 - 4",
-    "deadline": "Open",
-    "link": "https://unstop.com/hackathons/zeckathon-indian-institute-of-technology-iit-patna-1776287",
-    "registerUrl": "https://unstop.com/hackathons/zeckathon-indian-institute-of-technology-iit-patna-1776287"
-  },
-  {
-    "id": "grand-competitions-for-students-youth",
-    "title": "Grand Competitions For Students & Youth",
-    "name": "Grand Competitions For Students & Youth",
-    "organizer": "Ramakrishna Math, Vivekananda Empowerment Centre.",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹1,00,000",
-    "teamSize": "Individual",
-    "deadline": "Open",
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLSeY921v5peTKwZiuesms32Hdx7iMCiA5qM_5aiec4DUL_btBA/viewform",
-    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeY921v5peTKwZiuesms32Hdx7iMCiA5qM_5aiec4DUL_btBA/viewform"
-  },
-  {
-    "id": "hackwithaditya",
-    "title": "Hackwithaditya",
-    "name": "Hackwithaditya",
-    "organizer": "Aditya University, Oracle Academy",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹5,00,000",
-    "teamSize": "4 - 6",
-    "deadline": "Open",
-    "link": "https://hackathon.adityauniversity.in/",
-    "registerUrl": "https://hackathon.adityauniversity.in/"
-  },
-  {
-    "id": "singapore-embodied-ai-challenge-for-manufacturing",
-    "title": "Singapore Embodied AI Challenge for Manufacturing",
-    "name": "Singapore Embodied AI Challenge for Manufacturing",
-    "organizer": "National Robotics Programme",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  SGD 88,000",
-    "teamSize": "2 - 5",
-    "deadline": "Open",
-    "link": "https://nrp.gov.sg/SGEAIchallenge/",
-    "registerUrl": "https://nrp.gov.sg/SGEAIchallenge/"
   }
 ]
