@@ -1,5 +1,44 @@
 [
   {
+    "id": "hackz-26",
+    "title": "HackZ'26",
+    "name": "HackZ'26",
+    "organizer": "College of Engineering (CEG)",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 1,83,000",
+    "teamSize": "2 - 4",
+    "deadline": "Open",
+    "link": "https://unstop.com/hackathons/hackz26-computer-science-and-engineering-association-csea-ceg-anna-university-1776729",
+    "registerUrl": "https://unstop.com/hackathons/hackz26-computer-science-and-engineering-association-csea-ceg-anna-university-1776729"
+  },
+  {
+    "id": "design-hackathon",
+    "title": "Design Hackathon",
+    "name": "Design Hackathon",
+    "organizer": "Psgr Krishnammal College",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  TBA",
+    "teamSize": "2 - 4",
+    "deadline": "Open",
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLSf6nSb3VUexP6Dwr_sqLmnuZr3JcH5cDAhCv6lT-18vt1mFtg/viewform",
+    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLSf6nSb3VUexP6Dwr_sqLmnuZr3JcH5cDAhCv6lT-18vt1mFtg/viewform"
+  },
+  {
+    "id": "myonne-national-bug-bounty-challenge-2026",
+    "title": "MyOnne National Bug Bounty Challenge 2026",
+    "name": "MyOnne National Bug Bounty Challenge 2026",
+    "organizer": "MyOnne Amora Private Limited",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹3,00,000",
+    "teamSize": "1 - 4",
+    "deadline": "Open",
+    "link": "https://unstop.com/hackathons/myonne-national-bug-bounty-challenge-2026-myonne-amora-private-limited-1817686",
+    "registerUrl": "https://unstop.com/hackathons/myonne-national-bug-bounty-challenge-2026-myonne-amora-private-limited-1817686"
+  },
+  {
     "id": "tech-and-innovation-fair-2027",
     "title": "Tech And Innovation Fair 2027",
     "name": "Tech And Innovation Fair 2027",
@@ -453,44 +492,5 @@
     "deadline": "Open",
     "link": "https://www.scix.in/hackathons/c80a5324-5054-48c2-b187-258e471aa5b1",
     "registerUrl": "https://www.scix.in/hackathons/c80a5324-5054-48c2-b187-258e471aa5b1"
-  },
-  {
-    "id": "cmr-hackfest-4-0",
-    "title": "CMR HACKFEST 4.0",
-    "name": "CMR HACKFEST 4.0",
-    "organizer": "CMR College of Engineering & Technology",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹2,22,000",
-    "teamSize": "3 - 6",
-    "deadline": "Open",
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLScARXhVNqD-YZc8zXfG3AEy15TT7ZO-p9bJeW6J6RGvyxdGgQ/viewform",
-    "registerUrl": "https://docs.google.com/forms/d/e/1FAIpQLScARXhVNqD-YZc8zXfG3AEy15TT7ZO-p9bJeW6J6RGvyxdGgQ/viewform"
-  },
-  {
-    "id": "namma-ai-hackathon",
-    "title": "Namma AI Hackathon",
-    "name": "Namma AI Hackathon",
-    "organizer": "IIIT Bangalore, Nasscom",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  Cash Award",
-    "teamSize": "1 - 3",
-    "deadline": "Open",
-    "link": "https://www.coe-iot.com/namma-ai-hackathon/",
-    "registerUrl": "https://www.coe-iot.com/namma-ai-hackathon/"
-  },
-  {
-    "id": "anna-ai-os-founding-builder-challenge-2026",
-    "title": "Anna AI OS Founding Builder Challenge 2026",
-    "name": "Anna AI OS Founding Builder Challenge 2026",
-    "organizer": "Talentsec Technology (Hong Kong) Limited",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  Prizes worth $ 80,000",
-    "teamSize": "1 - 3",
-    "deadline": "Open",
-    "link": "https://unstop.com/hackathons/anna-ai-os-founding-builder-challenge-2026-talentsec-technology-hong-kong-limited-1762519",
-    "registerUrl": "https://unstop.com/hackathons/anna-ai-os-founding-builder-challenge-2026-talentsec-technology-hong-kong-limited-1762519"
   }
 ]
