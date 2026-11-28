@@ -1,5 +1,57 @@
 [
   {
+    "id": "robosoccer-roborun-2027",
+    "title": "Robosoccer & RoboRun 2027",
+    "name": "Robosoccer & RoboRun 2027",
+    "organizer": "Indian Institute of Technology (IIT), Madras",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 60,000",
+    "teamSize": "1 - 5",
+    "deadline": "Open",
+    "link": "https://unstop.com/competitions/robosoccer-iit-madras-1781202",
+    "registerUrl": "https://unstop.com/competitions/robosoccer-iit-madras-1781202"
+  },
+  {
+    "id": "sparkx-national-ai-challenge-wildcard",
+    "title": "SparkX - National AI Challenge Wildcard",
+    "name": "SparkX - National AI Challenge Wildcard",
+    "organizer": "IIT Bombay.",
+    "location": "Chennai",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  ₹ 2,00,000",
+    "teamSize": "2 - 4",
+    "deadline": "Open",
+    "link": "https://techfest.org/competitions/sparkx-wildcard",
+    "registerUrl": "https://techfest.org/competitions/sparkx-wildcard"
+  },
+  {
+    "id": "open-agentic-web-challenge",
+    "title": "Open Agentic Web Challenge",
+    "name": "Open Agentic Web Challenge",
+    "organizer": "Cognizant",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  $10,000",
+    "teamSize": "1 - 5",
+    "deadline": "Open",
+    "link": "https://cognizant-agenticweb.devpost.com/",
+    "registerUrl": "https://cognizant-agenticweb.devpost.com/"
+  },
+  {
+    "id": "google-agent-harness-on-physical-engineering",
+    "title": "Google - Agent Harness on Physical-Engineering",
+    "name": "Google - Agent Harness on Physical-Engineering",
+    "organizer": "Google",
+    "location": "Online",
+    "eligibility": "I, II, III, IV",
+    "prize": "Amount:  USD 4,00,000",
+    "teamSize": "1 - 5",
+    "deadline": "Open",
+    "link": "https://www.kaggle.com/competitions/physical-engineerings-last-exam",
+    "registerUrl": "https://www.kaggle.com/competitions/physical-engineerings-last-exam"
+  },
+  {
     "id": "agentware",
     "title": "Agentware",
     "name": "Agentware",
@@ -492,44 +544,5 @@
     "deadline": "Open",
     "link": "https://www.bharat1.ai/Buildathons?track=agritech",
     "registerUrl": "https://www.bharat1.ai/Buildathons?track=agritech"
-  },
-  {
-    "id": "india-s-biggest-voice-first-hackathon",
-    "title": "India’s Biggest Voice-first Hackathon",
-    "name": "India’s Biggest Voice-first Hackathon",
-    "organizer": "Scaler × Wispr Flow",
-    "location": "Chennai",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹30 L",
-    "teamSize": "1 - 3",
-    "deadline": "Open",
-    "link": "https://hackos.scaler.com/wispr/",
-    "registerUrl": "https://hackos.scaler.com/wispr/"
-  },
-  {
-    "id": "nextgen-ai-hackathon",
-    "title": "NextGen AI Hackathon",
-    "name": "NextGen AI Hackathon",
-    "organizer": "Product Space",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  ₹2,00,000",
-    "teamSize": "1 - 2",
-    "deadline": "Open",
-    "link": "https://unstop.com/hackathons/nextgen-ai-hackathon-product-space-1800891",
-    "registerUrl": "https://unstop.com/hackathons/nextgen-ai-hackathon-product-space-1800891"
-  },
-  {
-    "id": "nexconn-build-challenge-2026",
-    "title": "Nexconn Build Challenge 2026",
-    "name": "Nexconn Build Challenge 2026",
-    "organizer": "Nexconn",
-    "location": "Online",
-    "eligibility": "I, II, III, IV",
-    "prize": "Amount:  $5,000",
-    "teamSize": "1 - 4",
-    "deadline": "Open",
-    "link": "https://reskilll.com/hack/nexconn#how",
-    "registerUrl": "https://reskilll.com/hack/nexconn#how"
   }
 ]
